@@ -5,7 +5,7 @@ description: Occasionally audit the whole tree for modularity, dead code, earned
 
 # Codebase audit
 
-Feature work never asks whether a module is still reached. A bugfix review never sees the third copy of a helper. Run this skill occasionally, or when asked, against the whole tree — not against the diff of the ticket in front of you.
+Feature work never asks whether a module is still reached. A bugfix review never sees the third copy of a helper. Run this skill occasionally, or when asked, against the whole tree — not against the diff of the ticket in front of you. Load the tracker from [`.agents/binding`](../../references/load-binding.md) before filing.
 
 The questions are in [engineering judgment](../../references/engineering-judgment.md). This skill is how they get asked of code nobody is currently touching. Output is tickets via `$ticket-creation`, ranked later by `$backlog-grooming`. Do not start a refactor in place; an audit that lands a rewrite has become implementation without a contract.
 

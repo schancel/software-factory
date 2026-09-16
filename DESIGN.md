@@ -45,6 +45,7 @@ codebase-audit             parallel-coordination.md
                            issue-readiness.md
                            execution-efficiency.md
                            factory-rationale.md
+                           load-binding.md
 ```
 
 A skill is a short orchestrator. If a fact appears in two skills, it does not belong in either; it belongs in `references/`. Bindings name tracker verbs and may replace the ranking function. They do not restate the loop.
@@ -105,15 +106,15 @@ If the tracker cannot express blockers as edges, the binding says so and the pos
 
 | Script | Role |
 | --- | --- |
-| `scripts/ticket_poset.py` | GitHub `blockedBy` edges → dependency waves. Advisory. |
-| `scripts/ticket_triage.py` | Scores, missing readiness fields, declared-scope conflicts. Advisory. |
-| `scripts/test-skill-docs` | Mechanical lint that the kernel docs still encode the invariants. Advisory; confers no authority. |
+| `.agents/scripts/ticket_poset.py` | GitHub `blockedBy` edges → dependency waves. Advisory. |
+| `.agents/scripts/ticket_triage.py` | Scores, missing readiness fields, declared-scope conflicts. Advisory. |
+| `.agents/scripts/test-skill-docs` | Mechanical lint that the kernel docs still encode the invariants. Advisory; confers no authority. |
 
 Both are GitHub-binding helpers. A Pyramid deployment already computes a frontier (`pyr ready`); it does not run these.
 
 ## Adoption
 
-Consuming repos copy `.agents/{skills,references,bindings,scripts}`. Product-specific hard rules stay in that repo's `AGENTS.md`. This kernel will not absorb "a lookup that misses must not return zero," "never delete a `cfg`-guarded import from a Mac," or Finch's `with-cargo-slot` build mutex — those are machine-local wrappers, not the loop.
+Consuming repos run `install.sh <repo>` (or copy `.agents/{skills,references,bindings,scripts}` and symlink `.claude/skills`). They set `.agents/binding`. Product-specific hard rules — language build mutexes, platform-only compiler warnings, serialized browser suites — stay in that repo's `AGENTS.md`. They are not the loop.
 
 ## Open questions
 

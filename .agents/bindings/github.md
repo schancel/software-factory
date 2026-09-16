@@ -2,7 +2,7 @@
 
 The kernel's default tracker is GitHub Issues, with pull requests as the review and land surface, and `work-claim:v1` comments as the lock.
 
-Skills, examples, and scripts in this repository speak this binding unless a consuming repo names another.
+Skills speak this binding when `.agents/binding` sets `tracker: github` (the default). See [load-binding.md](../references/load-binding.md).
 
 ## Mapping
 
@@ -18,8 +18,8 @@ Skills, examples, and scripts in this repository speak this binding unless a con
 
 ## Scripts
 
-- `scripts/ticket_poset.py` reads open issues and native `blockedBy` edges, prints dependency waves. Pass `--repo owner/name` (defaults to `gh repo view`).
-- `scripts/ticket_triage.py` reads a JSON issue export, prints scores, `NEEDS_SPECIFICATION`, and declared-scope conflicts.
+- `.agents/scripts/ticket_poset.py` reads open issues and native `blockedBy` edges, prints dependency waves. Pass `--repo owner/name` (defaults to `gh repo view`).
+- `.agents/scripts/ticket_triage.py` reads a JSON issue export, prints scores, `NEEDS_SPECIFICATION`, and declared-scope conflicts.
 
 Both report. Neither claims, assigns, comments, or merges.
 

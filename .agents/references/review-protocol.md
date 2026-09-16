@@ -99,6 +99,8 @@ An integration verdict (`SAFE TO INTEGRATE`, `INTEGRATE AFTER FIXES`, `DO NOT IN
 
 ## Integration gate
 
+`$review` is the only skill that lands. `$implement` and `$coordinate` produce a candidate. `$backlog-loop` does not merge because a worker reported success.
+
 Land only when:
 
 - the current candidate has a converged review with no unresolved confirmed finding;

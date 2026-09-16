@@ -7,7 +7,7 @@ description: Implement one ready ticket or a direct specified request. Use when 
 
 Take a ready packet (or a direct, already-specified request) and produce a candidate that can be reviewed. This is the worker `$backlog-loop` dispatches. It is not the old all-in-one `backlog` skill: it does not rank the queue, claim sibling scopes, or run the review protocol.
 
-Default tracker: [GitHub Issues](../../bindings/github.md). Pyramid: [pyr binding](../../bindings/pyramid.md).
+Load the tracker from [`.agents/binding`](../../references/load-binding.md) before any tracker verb.
 
 ## Say the tier, then run only that tier
 
@@ -37,4 +37,4 @@ Before `$review`, compress: remove duplication, speculative abstractions, and te
 
 ## Hand off
 
-Do not merge because the tests are green. `$review` owns perspectives, confirmation, split/stack, and the land verdict. Report the exact commit, gates, remaining risks, and next action. Sibling coordination and integration of parallel workers belong to `$coordinate`.
+Do not merge because the tests are green. `$review` is the only skill that lands. Report the exact commit, gates, remaining risks, and next action. Sibling coordination belongs to `$coordinate`.

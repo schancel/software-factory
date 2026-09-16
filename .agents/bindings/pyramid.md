@@ -2,7 +2,7 @@
 
 Pyramid is a live deployment of hierarchical work items. `pyr` is the only backlog surface. GitHub issues, a seed roadmap, and conversation history do not mirror live state.
 
-This binding substitutes tracker verbs. It does not fork the kernel. Until a consuming Pyramid repo migrates, its own skills remain the ones that run.
+This binding substitutes tracker verbs when `.agents/binding` sets `tracker: pyramid`. It does not fork the kernel. Until a consuming Pyramid repo migrates, its own skills remain the ones that run.
 
 ## Mapping
 

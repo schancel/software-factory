@@ -5,7 +5,7 @@ description: Independently review the candidate that will land from risk-derived
 
 # Review
 
-Review the exact candidate that will land, not a moving branch. Derive perspectives from the actual diff, isolate each perspective, and treat every proposed finding as an unproven hypothesis until a different reviewer verifies a concrete failure path. Stance and stopping rules live in the [review protocol](../../references/review-protocol.md); [engineering judgment](../../references/engineering-judgment.md) is the shape perspective.
+Review the exact candidate that will land, not a moving branch. This is the only skill that lands. Derive perspectives from the actual diff, isolate each perspective, and treat every proposed finding as an unproven hypothesis until a different reviewer verifies a concrete failure path. Stance and stopping rules live in the [review protocol](../../references/review-protocol.md); [engineering judgment](../../references/engineering-judgment.md) is the shape perspective. Load the tracker from [`.agents/binding`](../../references/load-binding.md) before applying a land rule.
 
 Do not use this skill for lightweight prose edits that carry no behavioral claim.
 
@@ -40,5 +40,5 @@ Split only independently provable work. Stack when each intermediate state is sa
 - Run candidate code only within the execution boundary stated by its task packet.
 - Do not mutate the frozen candidate from a reviewer context.
 - Do not integrate with an unresolved confirmed finding.
-- Land per the repo's binding: GitHub squash carrying the reviewed tip, or fast-forward to that tip when commit identity is evidence.
+- Land only from this skill, per the loaded binding's land rule.
 - Review evidence belongs to the exact commit; production edits invalidate it.

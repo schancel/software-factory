@@ -77,16 +77,10 @@ The old all-in-one `backlog` skill is not here. It was doing five jobs, so agent
 
 ```sh
 git clone https://github.com/schancel/software-factory
-# from the consuming repo:
-mkdir -p .agents
-cp -R path/to/software-factory/.agents/skills \
-      path/to/software-factory/.agents/references \
-      path/to/software-factory/.agents/bindings \
-      path/to/software-factory/.agents/scripts \
-      .agents/
+sh path/to/software-factory/install.sh /path/to/consuming-repo
 ```
 
-Point agents at `.agents/skills/`. GitHub Issues is the default binding. Another tracker is a binding file, not a fork of the skills. Product-specific lore (a lookup that must not return zero, a `private/` tree, a language-specific build mutex) stays in *that* repo’s `AGENTS.md`.
+That copies `.agents/{skills,references,bindings,scripts}`, writes `.agents/binding` if missing (`tracker: github`), and symlinks `.claude/skills` so Claude Code sees the same skills. Point agents at `.agents/skills/`. Change `.agents/binding` to use another tracker; do not fork the skills. Language-specific build mutexes, serialized test browsers, and other machine lore stay in *that* repo’s `AGENTS.md`.
 
 Design notes, including why scoring is default and why one tracker uses a hole for scarce *points* instead, are in [`DESIGN.md`](DESIGN.md).
 

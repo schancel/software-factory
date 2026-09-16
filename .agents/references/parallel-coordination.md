@@ -33,7 +33,7 @@ Parallel production edits use separate worktrees or equivalently isolated worksp
 
 Record each worker's bounded scope, base revision, and non-secret workspace identity on the item as a [claim](work-claims.md). Branch names and worker messages alone are not durable ownership.
 
-Workers do not use shared stash state, reset another workspace, rewrite shared history, or clean up another worker's files. Shared databases and listen ports need per-worker names. Language-level caches (module caches, build caches) should stay user-global so worktrees do not download the world; source a repo-local env file if one exists.
+Workers do not use shared stash state, reset another workspace, rewrite shared history, or clean up another worker's files. Shared databases and listen ports need per-worker names. How a language's build cache, package store, or test runner behaves across worktrees is a consuming-repo problem — do not encode language-specific slot wrappers in this kernel.
 
 ## Interfaces and dependencies
 
@@ -59,7 +59,7 @@ Workers return exact commits or patches and evidence; they do not declare the pa
 2. applies handoffs in dependency order into a clean workspace without merge commits;
 3. resolves conflicts with the relevant subsystem owner rather than guessing;
 4. runs subsystem tests plus boundary and user-loop tests on the combined result;
-5. squashes each accepted feature or fix into its own commit, applies them linearly, and performs the required review of the series tip;
+5. squashes each accepted feature or fix into its own commit, applies them linearly, and hands the series tip to `$review`, which is the only skill that lands;
 6. records remaining work and cleans up workspaces as in [work-claims](work-claims.md).
 
 If integration repeatedly exposes cross-worker coupling, recombine that scope under one owner or redesign the interface. Do not compensate with more coordination ceremony.

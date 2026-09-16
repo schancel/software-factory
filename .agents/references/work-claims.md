@@ -2,7 +2,7 @@
 
 A work claim is the recorded ownership of a bounded file and semantic scope. For backlog-wrapper work, the `work-claim:v1` comment is the sole recorded ownership mechanism. It helps people avoid editing the same thing concurrently. It is a coordination record, not cryptographic authentication, and it does not grant merge, push, or closure authority.
 
-The default binding records claims as GitHub issue comments using `work-claim:v1` below. A non-GitHub binding maps the same events onto its tracker; see [bindings/github.md](../bindings/github.md) and [bindings/pyramid.md](../bindings/pyramid.md).
+The GitHub binding records claims as issue comments using `work-claim:v1` below. Load the tracker from [load-binding.md](load-binding.md); a non-GitHub binding maps the same events onto its tracker.
 
 Every process step must demonstrably reduce defect risk or improve shipping confidence at a cost proportional to the change; otherwise remove it. Tooling is advisory mechanical lint, never an authority engine.
 

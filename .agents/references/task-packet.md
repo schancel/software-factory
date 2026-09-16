@@ -23,14 +23,14 @@ The handoff does not repeat the item or pull-request history. Link durable evide
 
 ## Name a gate stage, never a recipe
 
-A packet names `scripts/factory/gates <stage>` (or the consuming repo's equivalent) and any test filter. It does not recite which checker to run, in which order, with which wrapper: that recitation drifts from the scripts and is how two workers end up running different things and calling both green.
+A packet names a gate *stage* the consuming repo already has (`scripts/factory/gates <stage>`, or whatever that repo documents in `AGENTS.md`) and any test filter. It does not recite which checker to run, in which order, with which wrapper: that recitation drifts from the scripts and is how two workers end up running different things and calling both green.
 
 A handoff without its gate matrix is incomplete. List the stages the scope required and what each returned:
 
 ```text
 gates docs   ok 3/3
 gates arch   ok 4/4
-gates test   ok 3/3 (filter: named::package)
+gates test   ok 3/3 (filter: the package this change touched)
 gates ci     not run — no workflow or script change
 ```
 
