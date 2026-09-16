@@ -18,7 +18,7 @@ For each item, record or extract:
 - accepted outcome and acceptance criteria;
 - owner and exact base revision/authority when delegation is planned;
 - value, cost, certainty, and unblocking scores with one-sentence justification, using the kernel [queue](../../references/queue.md) unless the binding replaces ranking;
-- open blocked-by dependencies (relationships, not prose);
+- open blocked-by dependencies (native tracker edges, not body prose);
 - declared files, subsystem, or semantic scope; and
 - risk tier and required proof/gate stage.
 
@@ -26,7 +26,7 @@ Missing acceptance criteria or owner means `NEEDS_SPECIFICATION`, not merely low
 
 ## Queue construction
 
-On GitHub, run `.agents/scripts/ticket_poset.py --repo owner/name --workers N --format json` for native dependency ordering, then `.agents/scripts/ticket_triage.py` for scores, readiness, and declared-scope conflicts. Dependencies impose ordering; file and semantic overlaps impose a scheduling mutex. Prefer independent tickets in the same dependency-eligible set.
+On GitHub, run `.agents/scripts/ticket_poset.py --repo owner/name --workers N --format json` for native dependency ordering, then `.agents/scripts/ticket_triage.py` for scores, readiness, and declared-scope conflicts. Write blocked-by edges per the GitHub binding's [blocked-by edges](../../bindings/github.md#blocked-by-edges) paragraph; body prose is not an edge. Dependencies impose ordering; file and semantic overlaps impose a scheduling mutex. Prefer independent tickets in the same dependency-eligible set.
 
 On Pyramid, `pyr ready --json` is that report. Do not invent the four-axis score.
 
