@@ -10,7 +10,7 @@ It is not an agent-runtime graph. Nodes here are work items, not prompt steps. T
 
 ## The bottleneck moved twice
 
-Before LLMs, the scarce resource was production. After them, it was humans: review, decisions, glue, noticing the bug. Generation scales with spend. Review does not.
+Before LLMs, the scarce resource was **writing the code**. After them, it was humans: review, decisions, glue, noticing the bug. Generation scales with spend. Review does not.
 
 In the repositories I run, spending the human hour *up front* — on tickets, contracts, and the shape of the data model — inverted that again. I can file well-scoped work faster than agents drain it. That is an observation from one person’s factory, not a study. The mechanism is not “remove the human.” It is that one hour of architecture now produces a graph many workers can consume, so the queue fills from intake and empties at generation speed.
 
