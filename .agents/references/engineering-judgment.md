@@ -76,7 +76,9 @@ Ask, when the diff invents a type, a name, or a check:
 - **Is this checked at the edge once, or all the way down?** Parse (or reject) at the boundary; the inside of the module should see a typed value, not re-validate a string. Scattered `if !valid` is not a hole, it is fear.
 - **Are we faster in theory?** Caches, pools, thread locals, and "hot path" rewrites without a measured problem are frameworks. Wait.
 
-A public payload, a stored row, and a log line are promises. Compatibility is cost of reversal, already above. Do not add Postel's law as "be liberal in what you accept" — tolerant readers hide broken writers.
+A public payload, a stored row, and a log line are promises. Compatibility is cost of reversal, already above.
+
+**Postel's law applies only to external inputs** (the wire, a file we did not write, a peer we do not control): be conservative in what you *send*; be robust in what you *accept* so a slightly-wrong peer does not knock you over. After that parse, stop being liberal. Tolerant readers *inside* the module hide broken writers. Do not Postel your own database, your own logs, or another module in-process.
 
 ## What a contract should say that a ticket usually does not
 
