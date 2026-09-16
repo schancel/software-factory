@@ -102,7 +102,7 @@ def parse_repo(value: str) -> tuple[str, str]:
 
 
 class CycleError(Exception):
-    """blocked_by contains a cycle, so no topological wave exists."""
+    """blocked_by contains a cycle among in-scope issues."""
 
 
 def waves(blocked_by: dict[int, list[int]]) -> list[list[int]]:
@@ -111,7 +111,18 @@ def waves(blocked_by: dict[int, list[int]]) -> list[list[int]]:
     while remaining:
         wave = sorted(number for number, blockers in remaining.items() if not blockers)
         if not wave:
-            raise CycleError("ticket_poset: dependency cycle detected")
+            in_scope = set(remaining)
+            # Out-of-scope blockers keep the dependent unplanned; they are not a cycle.
+            external = [
+                number
+                for number, blockers in remaining.items()
+                if not blockers & in_scope
+            ]
+            if not external:
+                raise CycleError("ticket_poset: dependency cycle detected")
+            for number in external:
+                del remaining[number]
+            continue
         planned.append(wave)
         for number in wave:
             del remaining[number]

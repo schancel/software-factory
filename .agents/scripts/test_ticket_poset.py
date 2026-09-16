@@ -18,6 +18,10 @@ def test_two_wave() -> None:
     assert waves({2: [1], 1: []}) == [[1], [2]]
 
 
+def test_out_of_scope_blocker() -> None:
+    assert waves({2: [1], 3: []}) == [[3]]
+
+
 def test_cycle() -> None:
     try:
         waves({1: [2], 2: [1]})
@@ -30,6 +34,7 @@ def main() -> int:
     test_empty()
     test_single()
     test_two_wave()
+    test_out_of_scope_blocker()
     test_cycle()
     print("ok")
     return 0
