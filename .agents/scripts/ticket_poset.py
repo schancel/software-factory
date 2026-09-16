@@ -101,6 +101,25 @@ def parse_repo(value: str) -> tuple[str, str]:
     return parts[0], parts[1]
 
 
+class CycleError(Exception):
+    """blocked_by contains a cycle, so no topological wave exists."""
+
+
+def waves(blocked_by: dict[int, list[int]]) -> list[list[int]]:
+    remaining = {number: set(blockers) for number, blockers in blocked_by.items()}
+    planned: list[list[int]] = []
+    while remaining:
+        wave = sorted(number for number, blockers in remaining.items() if not blockers)
+        if not wave:
+            raise CycleError("ticket_poset: dependency cycle detected")
+        planned.append(wave)
+        for number in wave:
+            del remaining[number]
+        for blockers in remaining.values():
+            blockers.difference_update(wave)
+    return planned
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", help="GitHub owner/name (default: current gh repo)")
@@ -130,18 +149,11 @@ def main() -> int:
         ]
         blocked_by[issue["number"]] = sorted(open_blockers)
 
-    remaining = {number: set(blockers) for number, blockers in blocked_by.items()}
-    waves: list[list[int]] = []
-    while remaining:
-        wave = sorted(number for number, blockers in remaining.items() if not blockers)
-        if not wave:
-            print("ticket_poset: dependency cycle detected", file=sys.stderr)
-            return 1
-        waves.append(wave)
-        for number in wave:
-            del remaining[number]
-        for blockers in remaining.values():
-            blockers.difference_update(wave)
+    try:
+        planned = waves(blocked_by)
+    except CycleError as error:
+        print(error, file=sys.stderr)
+        return 1
 
     plan = {
         "repository": f"{owner}/{name}",
@@ -153,24 +165,24 @@ def main() -> int:
                 "wave": index,
                 "parallel": numbers,
             }
-            for index, numbers in enumerate(waves)
+            for index, numbers in enumerate(planned)
         ],
     }
     if args.format == "json":
         print(json.dumps(plan, indent=2))
         return 0
 
-    ready = waves[0] if waves else []
-    blocked = [number for wave in waves[1:] for number in wave]
+    ready = planned[0] if planned else []
+    blocked = [number for wave in planned[1:] for number in wave]
 
     print(f"repository {owner}/{name}")
     print(f"open_in_scope {len(issues)}")
     print(f"ready {len(ready)}")
     print(f"blocked {len(blocked)}")
-    print(f"waves {len(waves)}")
+    print(f"waves {len(planned)}")
     print()
     print("## Dependency waves (parallel candidates)")
-    for wave_index, numbers in enumerate(waves):
+    for wave_index, numbers in enumerate(planned):
         print(f"### Wave {wave_index} (dispatch up to {args.workers}; refill on completion)")
         print("- " + ", ".join(f"#{number} {by_number[number]['title']}" for number in numbers))
 
