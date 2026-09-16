@@ -9,7 +9,7 @@ Use this skill when asked to work through the backlog or keep multiple ticket wo
 
 Load the tracker from [`.agents/binding`](../../references/load-binding.md) before any tracker verb. Pool mechanics: [parallel coordination](../../references/parallel-coordination.md).
 
-Maintain at most the requested worker count. Dispatch eligible, ready, non-overlapping tickets until full. As soon as any worker finishes, record its result, release or hand off its claim, refresh the item/poset state, and dispatch the next eligible ticket immediately. Dependency waves are ordering constraints, not barriers.
+Maintain at most the requested worker count. Dispatch [eligible](../../references/queue.md#eligible-work) tickets until full. As soon as any worker finishes, record its result, release or hand off its claim, refresh the item/poset state, and dispatch the next eligible ticket immediately. Dependency waves are ordering constraints, not barriers.
 
 On GitHub, `.agents/scripts/ready_queue.py --workers N --format json` is the dispatchable set: READY items in dependency order, `NEEDS_SPECIFICATION` omitted. Do not intersect `ticket_poset.py` and `ticket_triage.py` by hand. On Pyramid, `pyr ready --json` is that report — do not invent scores. Isolate workers with `.agents/scripts/issue_worktree.sh`.
 
@@ -17,4 +17,4 @@ Every delegation packet includes the ticket, accepted outcome, tier, provider/mo
 
 Machine-local constraints (serialized browser suites, one writer of a given store, language build mutexes) belong in the consuming repo's `AGENTS.md`. This skill will not guess them.
 
-Stop when the user-requested budget is exhausted, no eligible work remains, or authority, safety, claim, dependency, or scope decisions require the user. Do not merge or close items merely because a worker reports success. `$implement` produces the candidate; `$review` is the only skill that lands; this skill owns selection, dispatch, replenishment, and coordinator reporting.
+Stop when the user-requested budget is exhausted, [no eligible work remains](../../references/queue.md#eligible-work), or authority, safety, claim, dependency, or scope decisions require the user. Do not merge or close items merely because a worker reports success. `$implement` produces the candidate; `$review` is the only skill that lands; this skill owns selection, dispatch, replenishment, and coordinator reporting.
