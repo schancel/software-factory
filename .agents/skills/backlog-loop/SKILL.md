@@ -11,7 +11,7 @@ Load the tracker from [`.agents/binding`](../../references/load-binding.md) befo
 
 Maintain at most the requested worker count. Dispatch eligible, ready, non-overlapping tickets until full. As soon as any worker finishes, record its result, release or hand off its claim, refresh the item/poset state, and dispatch the next eligible ticket immediately. Dependency waves are ordering constraints, not barriers.
 
-On GitHub, `.agents/scripts/ticket_poset.py --workers N --format json` produces the waves; `.agents/scripts/issue_export.py | python3 .agents/scripts/ticket_triage.py` scores readiness. On Pyramid, `pyr ready --json` is that report — do not invent scores. Isolate workers with `.agents/scripts/issue_worktree.sh`.
+On GitHub, `.agents/scripts/ready_queue.py --workers N --format json` is the dispatchable set: READY items in dependency order, `NEEDS_SPECIFICATION` omitted. Do not intersect `ticket_poset.py` and `ticket_triage.py` by hand. On Pyramid, `pyr ready --json` is that report — do not invent scores. Isolate workers with `.agents/scripts/issue_worktree.sh`.
 
 Every delegation packet includes the ticket, accepted outcome, tier, provider/model lane, base revision, worktree, allowed and prohibited scope, proof/gates, and handoff format from [task-packet.md](../../references/task-packet.md). Use the native mechanism for the active harness. Preserve the packet fields and report the provider/model actually selected. If the harness cannot select the requested lane, report that instead of silently substituting the primary model.
 
