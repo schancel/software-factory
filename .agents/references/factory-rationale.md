@@ -13,3 +13,4 @@ Read this only when changing the workflow itself. These safeguards answer failur
 | Interesting work displaced a small fix blocking three pull requests. | Score ready work and take the highest return on review attention. |
 | A model took the shortest path and painted over a known next feature. | Cost-of-reversal questions in the contract, a shape perspective in review, and an occasional whole-tree audit. |
 | One all-in-one `backlog` skill was loaded for the wrong job. | Separate intake, grooming, dispatch, implement, coordinate, review, and audit. |
+| Loop refilled from taste after READY was empty. | Eligible work is READY ∩ dependency-eligible ∩ no mutex; empty READY is stop even if NEEDS_SPECIFICATION remains. |

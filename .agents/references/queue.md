@@ -44,6 +44,16 @@ When investigating an unready item, perform only the smallest action needed to r
 
 Blockers are tracker relationships, not sentences in the body. Prose dependencies are invisible to the poset.
 
+## Eligible work
+
+Eligible work is `READY` ∩ dependency-eligible ∩ no scope mutex. Taste, nits, and hypothetical frameworks are not `READY` work.
+
+`NEEDS_SPECIFICATION` waits for a named human. It is not a prompt to invent the design, and it is not dispatchable.
+
+Empty `READY` is stop, even if open `NEEDS_SPECIFICATION` items remain. The loop does not refill the queue from taste.
+
+`$implement` does not file tickets for polish. `$review` files product defects and contract holes, not style. `$codebase-audit` is occasional, not part of every loop.
+
 ## Measure, or the stopping rule is a feeling
 
 Record per change, in the terminal claim comment or the pull request:
