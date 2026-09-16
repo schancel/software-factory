@@ -10,7 +10,7 @@ Skills speak this binding when `.agents/binding` sets `tracker: github` (the def
 | --- | --- |
 | item | Issue |
 | claim | Issue comment containing `work-claim:v1` ([work-claims.md](../references/work-claims.md)) |
-| blocker | Native `blocked by` edge, not a sentence in the body |
+| blocker | Native `blocked-by` edge ([write path](#blocked-by-edges)), not a sentence in the body |
 | score | Four-axis formula recorded in the issue body or a maintainer comment ([queue.md](../references/queue.md)) |
 | ready | Acceptance criteria + owner present; delegated work also names repo, base SHA, authority |
 | packet | Posted on the issue or handed to a worker; not a substitute for the issue |
@@ -22,6 +22,39 @@ Skills speak this binding when `.agents/binding` sets `tracker: github` (the def
 - `.agents/scripts/ticket_triage.py` reads a JSON issue export, prints scores, `NEEDS_SPECIFICATION`, and declared-scope conflicts.
 
 Both report. Neither claims, assigns, comments, or merges.
+
+## Blocked-by edges
+
+`ticket_poset.py` reads native `blockedBy` relationships. A sentence in the issue body such as "blocked by #N" is not an edge.
+
+This `gh` has no `--blocked-by` or `--add-blocked-by` (`gh issue create --help`, `gh issue edit --help`). Do not invent those flags. Add and remove edges with GraphQL. `issueId` is the blocked issue; `blockingIssueId` is the issue it waits on:
+
+```sh
+gh api graphql -f query='
+mutation($issueId:ID!, $blockingIssueId:ID!) {
+  addBlockedBy(input: {issueId: $issueId, blockingIssueId: $blockingIssueId}) {
+    issue { number }
+    blockingIssue { number }
+  }
+}' -f issueId=BLOCKED_NODE_ID -f blockingIssueId=BLOCKER_NODE_ID
+
+gh api graphql -f query='
+mutation($issueId:ID!, $blockingIssueId:ID!) {
+  removeBlockedBy(input: {issueId: $issueId, blockingIssueId: $blockingIssueId}) {
+    issue { number }
+    blockingIssue { number }
+  }
+}' -f issueId=BLOCKED_NODE_ID -f blockingIssueId=BLOCKER_NODE_ID
+```
+
+Resolve a number to a node ID first:
+
+```sh
+gh api graphql -f query='
+query($owner:String!, $name:String!, $number:Int!) {
+  repository(owner:$owner, name:$name) { issue(number:$number) { id } }
+}' -F owner=OWNER -F name=REPO -F number=N
+```
 
 ## Land rule
 

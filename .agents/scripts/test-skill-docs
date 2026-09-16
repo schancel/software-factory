@@ -78,6 +78,9 @@ require_pattern "review is the only skill that lands" 'only skill that lands' "$
 require_pattern "poset script is invoked from .agents/scripts" '\.agents/scripts/ticket_poset' "$DOCS"
 require_pattern "skills load the tracker from .agents/binding" 'load-binding' "$DOCS"
 
+GH_BIND=$(normalized < "$ROOT/.agents/bindings/github.md")
+require_pattern "github binding names blocked-by write path" 'blocked-by|add-blocked-by' "$GH_BIND"
+
 GROOM=$(normalized < "$SKILLS/backlog-grooming/SKILL.md")
 forbid_pattern "grooming does not dispatch the pool" 'replenishing worker pool' "$GROOM"
 COORD=$(normalized < "$SKILLS/coordinate/SKILL.md")
