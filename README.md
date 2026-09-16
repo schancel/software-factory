@@ -16,16 +16,17 @@ In the repositories I run, spending the human hour *up front* — on tickets, co
 
 I still pick the framework and the structure. I do not have to notice every crash, or type every “this should be an enum.” Filing is cheap. Landing is not free. A report is not a ready ticket. A pile of similar reports is a proposal until someone accepts what the node is allowed to mean.
 
-## Shortest path is the default, and it is the wrong default for data models
+## Shortest path is the default, and it is the wrong default for data
 
-Left alone, a model ships the local edit that greens the test. That is correct for a typo. It is wrong for a schema, an identity, or a module boundary. The fix six months later is a migration, not a rename.
+Left alone, a model ships the local edit that greens the test. Fine for a typo. Not fine for how you store the thing.
 
-Two futures get confused:
+Two mistakes look like “thinking ahead” and are opposites:
 
-- **A framework for a caller you do not have** — adapter interfaces, plugin registries, a `Manager` whose only job is to look like architecture. Wait until you have built the similar thing three times. [The rule of three](https://holdenrehg.com/blog/2021-09-20_rule-of-three) is a warning sign, not a law.
-- **The shape of the durable record** — identity, cardinality, ownership, public format. If this is wrong, you migrate. Leave the hole now. A column you add later is cheap; a primary key you have to change is not.
+**Overbuilding the code.** One call site, so the model invents a PluginManager “for later.” You have not needed it three times. Delete it. [Rule of three](https://holdenrehg.com/blog/2021-09-20_rule-of-three) — a warning, not a law.
 
-The test is cost of reversal, not taste: *if this is wrong in six months, is the fix a local edit or a migration?* That question lives in one file, [`engineering-judgment.md`](.agents/references/engineering-judgment.md), and is loaded by the contract, the review, and an occasional whole-tree audit. A principles document that nothing invokes does not fire.
+**Underbuilding the data.** The product already talks about team invites next quarter, and the model stores `is_admin: true/false` on the user. Adding a column later is cheap. Changing what a row *means*, or what the primary key is, is a migration. Leave room in the *data* for the next thing you already know is coming. Do not build the unused framework.
+
+Ask: *if this is wrong in six months, do we rename a function or rewrite the database?* That question lives in [`engineering-judgment.md`](.agents/references/engineering-judgment.md). The contract, the review, and an occasional audit load it. A principles file that nothing opens does not fire.
 
 Related, from earlier and still the point: [working memory is about seven chunks](https://schancel.github.io/2019-07-14-software-and-magic-number-seven.html), and [a code review is an edit, not a gate](https://schancel.github.io/2019-07-14-code-reviews-incomplete-guide.html).
 
@@ -78,9 +79,12 @@ The old all-in-one `backlog` skill is not here. It was doing five jobs, so agent
 ```sh
 git clone https://github.com/schancel/software-factory
 sh path/to/software-factory/install.sh /path/to/consuming-repo
+sh path/to/software-factory/install.sh --tracker pyramid /path/to/consuming-repo
 ```
 
-That copies `.agents/{skills,references,bindings,scripts}`, writes `.agents/binding` if missing (`tracker: github`), and symlinks `.claude/skills` so Claude Code sees the same skills. After that the copy is yours: adapt skills, bindings, and scores to the repo. Do not submodule this kernel — a live pointer would freeze the adaptations. `install.sh --force` replaces those directories; it is not a merge of your edits. Language-specific build mutexes and other machine lore stay in *that* repo’s `AGENTS.md`.
+`--tracker github` (default) or `pyramid` writes `.agents/binding`. Linear is not a tracker yet ([#17](https://github.com/schancel/software-factory/issues/17)). After install, edit that file if you picked wrong.
+
+That copies `.agents/{skills,references,bindings,scripts}` and symlinks `.claude/skills`. After that the copy is yours. Do not submodule this kernel. `install.sh --force` replaces those directories; it is not a merge. `--force` does not overwrite `.agents/binding` unless you also pass `--tracker`.
 
 Design notes, including why scoring is default and why one tracker uses a hole for scarce *points* instead, are in [`DESIGN.md`](DESIGN.md).
 

@@ -64,7 +64,30 @@ EMPTY="$WORKDIR/empty"
 mkdir -p "$EMPTY"
 sh "$INSTALL" "$EMPTY" >/dev/null
 test -f "$EMPTY/.agents/binding" || fail "first install should write binding"
+grep -q 'tracker: github' "$EMPTY/.agents/binding" || fail "default tracker should be github"
 test -d "$EMPTY/.agents/skills" || fail "first install should copy skills"
 ok "first install into empty dest succeeds"
+
+PYR="$WORKDIR/pyr"
+mkdir -p "$PYR"
+sh "$INSTALL" --tracker pyramid "$PYR" >/dev/null
+grep -q 'tracker: pyramid' "$PYR/.agents/binding" || fail "--tracker pyramid should write pyramid"
+ok "--tracker pyramid on first install"
+
+mkdir -p "$WORKDIR/empty2"
+set +e
+bad_out=$(sh "$INSTALL" --tracker jira "$WORKDIR/empty2" 2>&1)
+bad_rc=$?
+set -e
+test "$bad_rc" -ne 0 || fail "unknown tracker should fail"
+printf '%s\n' "$bad_out" | grep -q 'unknown tracker' || fail "unknown tracker message missing"
+ok "unknown tracker refused"
+
+FORCE_TRACKER="$WORKDIR/force-tracker"
+mkdir -p "$FORCE_TRACKER"
+sh "$INSTALL" --tracker pyramid "$FORCE_TRACKER" >/dev/null
+sh "$INSTALL" --force --tracker github "$FORCE_TRACKER" >/dev/null
+grep -q 'tracker: github' "$FORCE_TRACKER/.agents/binding" || fail "--force --tracker should rewrite binding"
+ok "--force --tracker rewrites binding"
 
 printf 'PASS: install.sh reinstall contract\n'
