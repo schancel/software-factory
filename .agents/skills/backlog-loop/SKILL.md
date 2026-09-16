@@ -18,3 +18,9 @@ Every delegation packet includes the ticket, accepted outcome, tier, provider/mo
 Machine-local constraints (serialized browser suites, one writer of a given store, language build mutexes) belong in the consuming repo's `AGENTS.md`. This skill will not guess them.
 
 Stop when the user-requested budget is exhausted, [no eligible work remains](../../references/queue.md#eligible-work), or authority, safety, claim, dependency, or scope decisions require the user. Do not merge or close items merely because a worker reports success. `$implement` produces the candidate; `$review` is the only skill that lands; this skill owns selection, dispatch, replenishment, and coordinator reporting.
+
+## Do not run this in a long chat
+
+"Is the queue empty?" is `.agents/scripts/ready_queue.py` (or `pyr ready`). No model. Do not answer it by rereading a design conversation.
+
+Run `$backlog-loop` in a **new session** or a subagent started with no inherited history (`fork_turns="none"`). Workers already get a packet, not this chat. The coordinator should too: a long parent transcript is not the loop, and asking it for status is how you pay for 280k of prefix to print nothing.

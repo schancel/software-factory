@@ -14,6 +14,8 @@ Do not open a reference until the current step needs it. Tier 1 does not open th
 
 Prefer [the scripts](../scripts/) over composing claim blocks, triage JSON, or worktree paths by hand.
 
+Queue status is a script, not a prompt. `.agents/scripts/ready_queue.py` (GitHub) or `pyr ready` (Pyramid) is the empty-queue answer. Do not ask a long-lived coordinator conversation. If a model must run the loop, start it with no inherited history.
+
 ## Prompt cache
 
 xAI caches a byte-identical *prefix* of the messages array (sticky routing via `x-grok-conv-id` / `prompt_cache_key`). Within one worker that already happens: later tool turns hit cache. Across parallel `$implement` workers it currently does not — Grok Build puts the worktree path in the system prefix, which differs per worker.
