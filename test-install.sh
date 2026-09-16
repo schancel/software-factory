@@ -1,5 +1,6 @@
 #!/bin/sh
-# Regression for install.sh: refuse reinstall without --force; --force replaces dirs, not binding.
+# Regression: merge keeps dest-only skills; default skips existing files;
+# --force overwrites kernel-owned files; binding stays unless --tracker.
 set -eu
 
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -7,18 +8,6 @@ INSTALL="$HERE/install.sh"
 
 fail() { printf 'FAIL: %s\n' "$1" >&2; exit 1; }
 ok() { printf 'ok %s\n' "$1"; }
-
-tree_state() {
-    (CDPATH= cd -- "$1" && find . \( -type f -o -type l \) -print | sort | while IFS= read -r path; do
-        printf '%s\t' "$path"
-        if test -L "$path"; then
-            readlink "$path"
-            printf '\n'
-        else
-            cksum < "$path"
-        fi
-    done)
-}
 
 WORKDIR=$(mktemp -d)
 trap 'rm -rf "$WORKDIR"' EXIT
@@ -31,34 +20,27 @@ printf 'custom-ref\n' > "$DEST/.agents/references/keep.md"
 printf 'custom-binding-doc\n' > "$DEST/.agents/bindings/keep.md"
 printf 'custom-script\n' > "$DEST/.agents/scripts/keep.sh"
 printf 'tracker: pyramid\n' > "$DEST/.agents/binding"
-BEFORE=$(tree_state "$DEST")
 
-set +e
-refuse_out=$(sh "$INSTALL" "$DEST" 2>&1)
-refuse_rc=$?
-set -e
-test "$refuse_rc" -ne 0 || fail "reinstall without --force should exit nonzero, got $refuse_rc"
-printf '%s\n' "$refuse_out" | grep -q -- '--force' || fail "refuse message should mention --force"
-AFTER=$(tree_state "$DEST")
-test "$BEFORE" = "$AFTER" || fail "reinstall without --force changed dest"
-test ! -e "$DEST/.claude" || fail "refuse path created .claude"
-ok "refuse without --force leaves dest unchanged"
+sh "$INSTALL" "$DEST" >/dev/null
+grep -q 'custom-skill' "$DEST/.agents/skills/implement/SKILL.md" || fail "default merge overwrote customized implement"
+test -f "$DEST/.agents/skills/local-marker" || fail "default merge dropped dest-only skill"
+test -f "$DEST/.agents/references/keep.md" || fail "default merge dropped dest-only reference"
+test -f "$DEST/.agents/bindings/keep.md" || fail "default merge dropped dest-only binding doc"
+test -f "$DEST/.agents/scripts/keep.sh" || fail "default merge dropped dest-only script"
+test -f "$DEST/.agents/skills/ticket-creation/SKILL.md" || fail "default merge should add factory skills"
+grep -q 'tracker: pyramid' "$DEST/.agents/binding" || fail "default merge overwrote binding"
+ok "default merge adds factory skills and keeps dest-only + custom files"
 
-set +e
-force_out=$(sh "$INSTALL" --force "$DEST" 2>&1)
-force_rc=$?
-set -e
-test "$force_rc" -eq 0 || fail "--force should succeed, got $force_rc: $force_out"
-test ! -e "$DEST/.agents/skills/local-marker" || fail "--force should replace dest skills"
-test ! -e "$DEST/.agents/references/keep.md" || fail "--force should replace dest references"
-test ! -e "$DEST/.agents/bindings/keep.md" || fail "--force should replace dest bindings"
-test ! -e "$DEST/.agents/scripts/keep.sh" || fail "--force should replace dest scripts"
-test -f "$DEST/.agents/skills/implement/SKILL.md" || fail "--force should copy factory skills"
+sh "$INSTALL" --force "$DEST" >/dev/null
 if grep -q 'custom-skill' "$DEST/.agents/skills/implement/SKILL.md"; then
-    fail "--force left custom skill"
+    fail "--force should overwrite kernel-owned implement/SKILL.md"
 fi
+test -f "$DEST/.agents/skills/local-marker" || fail "--force deleted dest-only skill"
+test -f "$DEST/.agents/references/keep.md" || fail "--force deleted dest-only reference"
+test -f "$DEST/.agents/bindings/keep.md" || fail "--force deleted dest-only binding doc"
+test -f "$DEST/.agents/scripts/keep.sh" || fail "--force deleted dest-only script"
 grep -q 'tracker: pyramid' "$DEST/.agents/binding" || fail "--force overwrote binding"
-ok "--force replaces four dirs and preserves binding"
+ok "--force overwrites kernel-owned files; keeps dest-only; preserves binding"
 
 EMPTY="$WORKDIR/empty"
 mkdir -p "$EMPTY"
@@ -90,4 +72,4 @@ sh "$INSTALL" --force --tracker github "$FORCE_TRACKER" >/dev/null
 grep -q 'tracker: github' "$FORCE_TRACKER/.agents/binding" || fail "--force --tracker should rewrite binding"
 ok "--force --tracker rewrites binding"
 
-printf 'PASS: install.sh reinstall contract\n'
+printf 'PASS: install.sh merge contract\n'

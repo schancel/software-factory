@@ -119,7 +119,7 @@ Both are GitHub-binding helpers. A Pyramid deployment already computes a frontie
 
 Consuming repos **vendor** a snapshot. They run `install.sh <repo>` once (or copy `.agents/{skills,references,bindings,scripts}` and symlink `.claude/skills`), set `.agents/binding`, and then own the tree. Product-specific hard rules — language build mutexes, serialized browser suites, `pyr` verbs, scoring vs points — are local edits, not a fork of this git history.
 
-Do not submodule. A live pointer to this kernel would fight the reason to copy: Finch, Daybook, and Pyramid already adapted the loop and must keep doing so. `install.sh --force` replaces the four directories; it is not a merge. Pulling kernel updates is a diff the consuming repo applies by hand.
+Do not submodule. A live pointer to this kernel would fight the reason to copy: Finch, Daybook, and Pyramid already adapted the loop and must keep doing so. `install.sh` overlays: it never deletes dest-only skills. Default skips files that already exist; `--force` overwrites kernel-owned paths so you can pull kernel updates without wiping `daybook-food`. Binding is unchanged unless `--tracker` is passed.
 
 ## Open questions
 

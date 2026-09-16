@@ -1,8 +1,9 @@
 #!/bin/sh
-# Copy the kernel into a consuming repo.
-# --tracker github|pyramid selects the ticket tracker (writes .agents/binding).
-# --force replaces skills/references/bindings/scripts. Binding is left alone
-# unless --tracker is also passed.
+# Overlay the kernel into a consuming repo. Never deletes dest-only files.
+# Default: copy missing paths; skip files that already exist.
+# --force: overwrite files the kernel also has; still keep dest-only skills.
+# --tracker github|pyramid writes .agents/binding (otherwise leave it, or
+# create github if missing).
 set -eu
 
 usage() {
@@ -44,17 +45,34 @@ case ${TRACKER:-github} in
         ;;
 esac
 
-if test "$FORCE" -eq 0 && test -e "$DEST/.agents/skills"; then
-    printf 'install: %s already exists; pass --force to replace skills, references, bindings, and scripts\n' "$DEST/.agents/skills" >&2
-    exit 1
-fi
-
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+# Overlay src onto dest. Directories are created. Dest-only names stay.
+# Files: copy if missing; with --force, overwrite kernel-owned paths.
+merge_tree() {
+    # local: nested calls must not clobber the caller's for-loop.
+    local src dest item name target
+    src=$1
+    dest=$2
+    mkdir -p "$dest"
+    for item in "$src"/*; do
+        test -e "$item" || continue
+        name=$(basename "$item")
+        target="$dest/$name"
+        if test -d "$item" && test ! -L "$item"; then
+            merge_tree "$item" "$target"
+        elif test -e "$target" && test "$FORCE" -eq 0; then
+            continue
+        else
+            cp -f "$item" "$target"
+        fi
+    done
+}
+
 mkdir -p "$DEST/.agents" "$DEST/.claude/skills"
 
 for part in skills references bindings scripts; do
-    rm -rf "$DEST/.agents/$part"
-    cp -R "$HERE/.agents/$part" "$DEST/.agents/$part"
+    merge_tree "$HERE/.agents/$part" "$DEST/.agents/$part"
 done
 
 write_binding() {
@@ -70,10 +88,11 @@ elif test ! -f "$DEST/.agents/binding"; then
 fi
 
 for skill in "$DEST/.agents/skills"/*; do
+    test -e "$skill" || continue
     name=$(basename "$skill")
     ln -sfn "../../.agents/skills/$name" "$DEST/.claude/skills/$name"
 done
 
-printf 'installed factory skills into %s/.agents\n' "$DEST"
+printf 'installed factory skills into %s/.agents (merge; dest-only paths kept)\n' "$DEST"
 printf 'tracker: '
 sed -n 's/^tracker: //p' "$DEST/.agents/binding" | head -1
