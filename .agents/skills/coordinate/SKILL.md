@@ -7,7 +7,7 @@ description: Coordinate implementation with solution contracts, exclusive work c
 
 Deliver the smallest coherent change that satisfies the accepted outcome while keeping independently evolving subsystems understandable in bounded context. This workflow is model-neutral: use the runtime's available delegation and workspace-isolation facilities without depending on vendor-specific agent names.
 
-Use this skill for production code, executable prototypes, or delegated implementation. Skip ordinary research and lightweight prose edits. A single backlog item with no siblings can go straight to `$implement-ticket`; load this when two or more workstreams, or an integration owner distinct from the workers, are in play.
+Use this skill for production code, executable prototypes, or delegated implementation. Skip ordinary research and lightweight prose edits. A single backlog item with no siblings goes to `$implement`; load this when two or more workstreams, or an integration owner distinct from the workers, are in play.
 
 ## Establish the work boundary
 

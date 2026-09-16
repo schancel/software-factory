@@ -5,7 +5,7 @@ description: Continuously triage the backlog and replenish a bounded pool of har
 
 # Autonomous backlog coordinator
 
-Use this skill when asked to work through the backlog or keep multiple ticket workers busy. Invoke `$backlog-grooming`, then delegate each selected packet to `$implement-ticket` through the current harness's native subagent mechanism.
+Use this skill when asked to work through the backlog or keep multiple ticket workers busy. Invoke `$backlog-grooming`, then delegate each selected packet to `$implement` through the current harness's native subagent mechanism.
 
 Default tracker: [GitHub Issues](../../bindings/github.md). Pyramid: [pyr binding](../../bindings/pyramid.md). Pool mechanics: [parallel coordination](../../references/parallel-coordination.md).
 
@@ -17,4 +17,4 @@ Every delegation packet includes the ticket, accepted outcome, tier, provider/mo
 
 Machine-local constraints (browser suites serialized, one writer of a given store, worktree helpers that wire `node_modules`) belong in the consuming repo's `AGENTS.md`. This skill will not guess them.
 
-Stop when the user-requested budget is exhausted, no eligible work remains, or authority, safety, claim, dependency, or scope decisions require the user. Do not merge or close items merely because a worker reports success. `$implement-ticket` owns each individual ticket lifecycle; this skill owns selection, dispatch, replenishment, and coordinator reporting.
+Stop when the user-requested budget is exhausted, no eligible work remains, or authority, safety, claim, dependency, or scope decisions require the user. Do not merge or close items merely because a worker reports success. `$implement` produces the candidate; `$review` owns the land verdict; this skill owns selection, dispatch, replenishment, and coordinator reporting.

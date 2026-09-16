@@ -42,7 +42,17 @@ A useful finding contains:
 - the affected invariant; and
 - whether it belongs to the current contract.
 
-A finding is a hypothesis until someone else reproduces it. Confirmed means a **different** reviewer walked a concrete failure path: inputs, state, and the wrong result. A model's own confidence is not that evidence and must not be used as a filter; a second independent pass is.
+A finding is a hypothesis until someone else reproduces it. Confirmed means a **different** reviewer walked a concrete failure path: inputs, state, and the wrong result. A model's own confidence is not that evidence and must not be used as a filter; a second independent pass is. The verifier must actively seek counterevidence in guards, preconditions, callers, and platform contracts.
+
+### Mutation testing: budgeted, not swept
+
+Breaking a guard on purpose to see whether any test notices answers a question nothing else answers, and it costs a full suite run per mutation. Spend it only where a violation would be **silent** — no crash, no failing test, no rejected input, only a wrong state that later validation still accepts.
+
+Budget: at most about five mutations per candidate, chosen from the guards the change itself introduces on an authority, persistence, or history-validation path. Never a blanket sweep of every conditional in the diff.
+
+Cheaper substitutes, in order: the fail-before/pass-after evidence already required for every repair; deleting a single introduced guard and running the suite; coverage over changed lines.
+
+A surviving mutant on a path the change did not touch is a recorded follow-up, not a repair and not a new round. Use disposable fixtures. Never alter the frozen branch.
 
 Track five independent axes:
 

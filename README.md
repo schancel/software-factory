@@ -17,7 +17,7 @@ idea / bug
 ticket-creation ──► backlog-grooming ──► backlog-loop
                          │                    │
                          │                    ▼
-                         │              implement-ticket
+                         │                 implement
                          │                    │
                          │         coordinate (contracts, claims,
                          │          packets, isolated worktrees)
@@ -37,7 +37,7 @@ ticket-creation ──► backlog-grooming ──► backlog-loop
 | [`ticket-creation`](.agents/skills/ticket-creation/SKILL.md) | Someone described a bug, regression, or improvement. Outcome is a ticket, not a patch. |
 | [`backlog-grooming`](.agents/skills/backlog-grooming/SKILL.md) | Rank, block, and packetize the queue. Does not implement. |
 | [`backlog-loop`](.agents/skills/backlog-loop/SKILL.md) | Keep a bounded pool of workers busy on the poset. |
-| [`implement-ticket`](.agents/skills/implement-ticket/SKILL.md) | Ship one accepted ticket through contract, work, review, and merge. |
+| [`implement`](.agents/skills/implement/SKILL.md) | Code one ready packet or a direct specified request. Hands off to review. |
 | [`coordinate`](.agents/skills/coordinate/SKILL.md) | Parallel workers, exclusive scope, frozen interfaces, integration ownership. |
 | [`review`](.agents/skills/review/SKILL.md) | Multi-perspective review of the candidate that will land. May split, stack, or file follow-ups. |
 | [`codebase-audit`](.agents/skills/codebase-audit/SKILL.md) | Occasional whole-tree look: dead code, missing seams, patterns that have earned an abstraction, modules nobody can hold in working memory. |

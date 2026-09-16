@@ -5,7 +5,7 @@ description: Turn conversational bug reports, regressions, and improvement ideas
 
 # Ticket creation
 
-Use this skill when a user describes something that went wrong, an unexpected behavior, or a concrete improvement they want tracked. The outcome is one well-scoped ticket (or a draft), not an implementation plan. For implementation, hand off to `$implement-ticket`.
+Use this skill when a user describes something that went wrong, an unexpected behavior, or a concrete improvement they want tracked. The outcome is one well-scoped ticket (or a draft), not an implementation plan. For implementation of a ready item, hand off to `$implement`.
 
 The default tracker is GitHub Issues ([binding](../../bindings/github.md)). If the repo names Pyramid, substitute [that binding](../../bindings/pyramid.md).
 

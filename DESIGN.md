@@ -37,32 +37,33 @@ skills (invocable)          references (one home per fact)        bindings
 ─────────────────          ──────────────────────────────        ────────
 ticket-creation            engineering-judgment.md               github.md   (default)
 backlog-grooming           solution-contract.md                  pyramid.md
-implement-ticket           work-claims.md
+implement                  work-claims.md
 backlog-loop               task-packet.md
 coordinate                 review-protocol.md
 review                     queue.md
 codebase-audit             parallel-coordination.md
                            issue-readiness.md
                            execution-efficiency.md
+                           factory-rationale.md
 ```
 
 A skill is a short orchestrator. If a fact appears in two skills, it does not belong in either; it belongs in `references/`. Bindings name tracker verbs and may replace the ranking function. They do not restate the loop.
 
 ### Why these seven skills
 
-The legacy skill in the source repos was one page named `backlog` that grew intake, ranking, claims, review, and merge. It was doing five jobs, so agents loaded it for the wrong one and skipped the others.
+The legacy skill in the source repos was one page named `backlog` that grew intake, ranking, claims, review, and merge. It is **not** in this kernel. The factored pieces, plus two skills the factoring did not originally add:
 
 | Skill | Job it owns | Job it refuses |
 | --- | --- | --- |
 | ticket-creation | Evidence-based item on the tracker | Implementation, claims, ranking |
 | backlog-grooming | Readiness, scores, blockers, dispatch packets | Implementation, merge |
-| implement-ticket | One accepted item through to integrated proof | Queue policy, sibling coordination |
 | backlog-loop | Replenishing pool over the poset | Merging because a worker said it was done |
+| implement | One ready packet → a reviewable candidate | Queue policy, sibling coordination, review |
 | coordinate | Exclusive scope, frozen interfaces, integration | Choosing *which* item |
 | review | Perspectives, confirmation, split/stack, follow-ups | Implementing the original ticket |
 | codebase-audit | Whole-tree shape, dead code, earned abstractions | Riding along on a bugfix |
 
-`coordinate` exists because parallel work happens on a direct request, not only on a backlog item. `codebase-audit` exists because feature work never asks "is this module still reached?" and a bugfix review never sees the third copy of a pattern.
+`implement` is the thin worker that should have replaced `backlog` instead of leaving the mega-file behind. `codebase-audit` is the other addition: feature work never asks "is this module still reached?" and a bugfix review never sees the third copy of a pattern. `coordinate` exists because parallel work happens on a direct request, not only on a backlog item. Failure lore that explains *why* a step exists lives in [`factory-rationale.md`](.agents/references/factory-rationale.md) and is not loaded during ordinary issue work.
 
 ### Why judgment is not a skill
 
@@ -106,12 +107,13 @@ If the tracker cannot express blockers as edges, the binding says so and the pos
 | --- | --- |
 | `scripts/ticket_poset.py` | GitHub `blockedBy` edges → dependency waves. Advisory. |
 | `scripts/ticket_triage.py` | Scores, missing readiness fields, declared-scope conflicts. Advisory. |
+| `scripts/test-skill-docs` | Mechanical lint that the kernel docs still encode the invariants. Advisory; confers no authority. |
 
 Both are GitHub-binding helpers. A Pyramid deployment already computes a frontier (`pyr ready`); it does not run these.
 
 ## Adoption
 
-Consuming repos copy `.agents/{skills,references,bindings,scripts}`. Product-specific hard rules stay in that repo's `AGENTS.md`. This kernel will not absorb "a lookup that misses must not return zero" or "never delete a `cfg`-guarded import from a Mac."
+Consuming repos copy `.agents/{skills,references,bindings,scripts}`. Product-specific hard rules stay in that repo's `AGENTS.md`. This kernel will not absorb "a lookup that misses must not return zero," "never delete a `cfg`-guarded import from a Mac," or Finch's `with-cargo-slot` build mutex — those are machine-local wrappers, not the loop.
 
 ## Open questions
 

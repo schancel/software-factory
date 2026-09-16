@@ -1,6 +1,6 @@
 # Work-claim protocol
 
-A work claim is the recorded ownership of a bounded file and semantic scope. It helps people avoid editing the same thing concurrently. It is a coordination record, not cryptographic authentication, and it does not grant merge, push, or closure authority.
+A work claim is the recorded ownership of a bounded file and semantic scope. For backlog-wrapper work, the `work-claim:v1` comment is the sole recorded ownership mechanism. It helps people avoid editing the same thing concurrently. It is a coordination record, not cryptographic authentication, and it does not grant merge, push, or closure authority.
 
 The default binding records claims as GitHub issue comments using `work-claim:v1` below. A non-GitHub binding maps the same events onto its tracker; see [bindings/github.md](../bindings/github.md) and [bindings/pyramid.md](../bindings/pyramid.md).
 
