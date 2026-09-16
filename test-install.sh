@@ -1,6 +1,5 @@
 #!/bin/sh
-# Regression: merge keeps dest-only skills; default skips existing files;
-# --force overwrites kernel-owned files; binding stays unless --tracker.
+# Merge keeps dest-only names; SKILL.md is 3-way merged against .factory-base.
 set -eu
 
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -12,49 +11,52 @@ ok() { printf 'ok %s\n' "$1"; }
 WORKDIR=$(mktemp -d)
 trap 'rm -rf "$WORKDIR"' EXIT
 
+EMPTY="$WORKDIR/empty"
+mkdir -p "$EMPTY"
+sh "$INSTALL" "$EMPTY" >/dev/null
+test -f "$EMPTY/.agents/skills/implement/SKILL.md" || fail "empty dest should get factory skills"
+test -f "$EMPTY/.agents/.factory-base/skills/implement/SKILL.md" || fail "should record vendor base"
+grep -q 'tracker: github' "$EMPTY/.agents/binding" || fail "default tracker github"
+ok "first install into empty dest"
+
+# Local line in SKILL.md must survive a second install (kernel unchanged).
+printf '\nLOCAL_EDIT\n' >> "$EMPTY/.agents/skills/implement/SKILL.md"
+sh "$INSTALL" "$EMPTY" >/dev/null
+grep -q 'LOCAL_EDIT' "$EMPTY/.agents/skills/implement/SKILL.md" || fail "second install dropped local SKILL.md edit"
+grep -q 'Implement one unit of work' "$EMPTY/.agents/skills/implement/SKILL.md" || fail "second install dropped kernel SKILL.md"
+ok "reinstall 3-way-merges local SKILL.md edits"
+
 DEST="$WORKDIR/dest"
-mkdir -p "$DEST/.agents/skills/implement" "$DEST/.agents/references" "$DEST/.agents/bindings" "$DEST/.agents/scripts"
+mkdir -p "$DEST/.agents/skills/implement" "$DEST/.agents/references" "$DEST/.agents/scripts"
 printf 'custom-skill\n' > "$DEST/.agents/skills/implement/SKILL.md"
 printf 'local-only\n' > "$DEST/.agents/skills/local-marker"
 printf 'custom-ref\n' > "$DEST/.agents/references/keep.md"
-printf 'custom-binding-doc\n' > "$DEST/.agents/bindings/keep.md"
 printf 'custom-script\n' > "$DEST/.agents/scripts/keep.sh"
 printf 'tracker: pyramid\n' > "$DEST/.agents/binding"
 
 sh "$INSTALL" "$DEST" >/dev/null
-grep -q 'custom-skill' "$DEST/.agents/skills/implement/SKILL.md" || fail "default merge overwrote customized implement"
-test -f "$DEST/.agents/skills/local-marker" || fail "default merge dropped dest-only skill"
-test -f "$DEST/.agents/references/keep.md" || fail "default merge dropped dest-only reference"
-test -f "$DEST/.agents/bindings/keep.md" || fail "default merge dropped dest-only binding doc"
-test -f "$DEST/.agents/scripts/keep.sh" || fail "default merge dropped dest-only script"
-test -f "$DEST/.agents/skills/ticket-creation/SKILL.md" || fail "default merge should add factory skills"
-grep -q 'tracker: pyramid' "$DEST/.agents/binding" || fail "default merge overwrote binding"
-ok "default merge adds factory skills and keeps dest-only + custom files"
+grep -q 'custom-skill' "$DEST/.agents/skills/implement/SKILL.md" || fail "no-base dest SKILL.md should be skipped"
+test -f "$DEST/.agents/skills/local-marker" || fail "dropped dest-only skill"
+test -f "$DEST/.agents/references/keep.md" || fail "dropped dest-only reference"
+test -f "$DEST/.agents/scripts/keep.sh" || fail "dropped dest-only script"
+test -f "$DEST/.agents/skills/ticket-creation/SKILL.md" || fail "should add factory skills"
+grep -q 'tracker: pyramid' "$DEST/.agents/binding" || fail "overwrote binding"
+ok "dest-only names kept; unmatched SKILL.md skipped without base"
 
 sh "$INSTALL" --force "$DEST" >/dev/null
 if grep -q 'custom-skill' "$DEST/.agents/skills/implement/SKILL.md"; then
-    fail "--force should overwrite kernel-owned implement/SKILL.md"
+    fail "--force should take kernel SKILL.md"
 fi
 test -f "$DEST/.agents/skills/local-marker" || fail "--force deleted dest-only skill"
 test -f "$DEST/.agents/references/keep.md" || fail "--force deleted dest-only reference"
-test -f "$DEST/.agents/bindings/keep.md" || fail "--force deleted dest-only binding doc"
-test -f "$DEST/.agents/scripts/keep.sh" || fail "--force deleted dest-only script"
 grep -q 'tracker: pyramid' "$DEST/.agents/binding" || fail "--force overwrote binding"
-ok "--force overwrites kernel-owned files; keeps dest-only; preserves binding"
-
-EMPTY="$WORKDIR/empty"
-mkdir -p "$EMPTY"
-sh "$INSTALL" "$EMPTY" >/dev/null
-test -f "$EMPTY/.agents/binding" || fail "first install should write binding"
-grep -q 'tracker: github' "$EMPTY/.agents/binding" || fail "default tracker should be github"
-test -d "$EMPTY/.agents/skills" || fail "first install should copy skills"
-ok "first install into empty dest succeeds"
+ok "--force takes kernel files; keeps dest-only; preserves binding"
 
 PYR="$WORKDIR/pyr"
 mkdir -p "$PYR"
 sh "$INSTALL" --tracker pyramid "$PYR" >/dev/null
-grep -q 'tracker: pyramid' "$PYR/.agents/binding" || fail "--tracker pyramid should write pyramid"
-ok "--tracker pyramid on first install"
+grep -q 'tracker: pyramid' "$PYR/.agents/binding" || fail "--tracker pyramid"
+ok "--tracker pyramid"
 
 mkdir -p "$WORKDIR/empty2"
 set +e
@@ -72,4 +74,4 @@ sh "$INSTALL" --force --tracker github "$FORCE_TRACKER" >/dev/null
 grep -q 'tracker: github' "$FORCE_TRACKER/.agents/binding" || fail "--force --tracker should rewrite binding"
 ok "--force --tracker rewrites binding"
 
-printf 'PASS: install.sh merge contract\n'
+printf 'PASS: install.sh SKILL.md merge contract\n'

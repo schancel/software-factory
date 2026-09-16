@@ -1,9 +1,11 @@
 #!/bin/sh
 # Overlay the kernel into a consuming repo. Never deletes dest-only files.
-# Default: copy missing paths; skip files that already exist.
-# --force: overwrite files the kernel also has; still keep dest-only skills.
-# --tracker github|pyramid writes .agents/binding (otherwise leave it, or
-# create github if missing).
+#
+# Text files (SKILL.md and the rest): three-way merge with git merge-file
+# against .agents/.factory-base (last installed kernel). Local edits and
+# kernel updates both land in the dest file.
+# --force: take the kernel file (discard dest edits on that path).
+# --tracker github|pyramid writes .agents/binding.
 set -eu
 
 usage() {
@@ -45,34 +47,63 @@ case ${TRACKER:-github} in
         ;;
 esac
 
-HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+command -v git >/dev/null 2>&1 || { printf 'install: git is required for SKILL.md merges\n' >&2; exit 1; }
 
-# Overlay src onto dest. Directories are created. Dest-only names stay.
-# Files: copy if missing; with --force, overwrite kernel-owned paths.
-merge_tree() {
-    # local: nested calls must not clobber the caller's for-loop.
-    local src dest item name target
-    src=$1
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+CONFLICTS=0
+TMP=$(mktemp)
+trap 'rm -f "$TMP"' EXIT
+
+# kernel_file dest_file base_file
+merge_one() {
+    kernel=$1
     dest=$2
-    mkdir -p "$dest"
-    for item in "$src"/*; do
-        test -e "$item" || continue
-        name=$(basename "$item")
-        target="$dest/$name"
-        if test -d "$item" && test ! -L "$item"; then
-            merge_tree "$item" "$target"
-        elif test -e "$target" && test "$FORCE" -eq 0; then
-            continue
-        else
-            cp -f "$item" "$target"
-        fi
-    done
+    base=$3
+    mkdir -p "$(dirname "$dest")" "$(dirname "$base")"
+    if test ! -f "$dest"; then
+        cp "$kernel" "$dest"
+        cp "$kernel" "$base"
+        return 0
+    fi
+    if cmp -s "$kernel" "$dest"; then
+        cp "$kernel" "$base"
+        return 0
+    fi
+    if test "$FORCE" -eq 1; then
+        cp "$kernel" "$dest"
+        cp "$kernel" "$base"
+        return 0
+    fi
+    if test ! -f "$base"; then
+        printf 'install: skip %s (local file, no vendor base; --force to take kernel)\n' "$dest" >&2
+        return 0
+    fi
+    set +e
+    git merge-file "$dest" "$base" "$kernel"
+    rc=$?
+    set -e
+    if test "$rc" -eq 0; then
+        cp "$kernel" "$base"
+        return 0
+    fi
+    if test "$rc" -gt 0 && test "$rc" -lt 128; then
+        printf 'install: CONFLICT %s (%s hunks); resolve markers then commit .factory-base\n' "$dest" "$rc" >&2
+        CONFLICTS=$((CONFLICTS + 1))
+        return 0
+    fi
+    printf 'install: git merge-file failed on %s\n' "$dest" >&2
+    return 1
 }
 
-mkdir -p "$DEST/.agents" "$DEST/.claude/skills"
-
 for part in skills references bindings scripts; do
-    merge_tree "$HERE/.agents/$part" "$DEST/.agents/$part"
+    srcroot="$HERE/.agents/$part"
+    destroot="$DEST/.agents/$part"
+    baseroot="$DEST/.agents/.factory-base/$part"
+    find "$srcroot" -type f > "$TMP"
+    while IFS= read -r kernel; do
+        rel=${kernel#"$srcroot"/}
+        merge_one "$kernel" "$destroot/$rel" "$baseroot/$rel"
+    done < "$TMP"
 done
 
 write_binding() {
@@ -87,12 +118,17 @@ elif test ! -f "$DEST/.agents/binding"; then
     write_binding github
 fi
 
+mkdir -p "$DEST/.claude/skills"
 for skill in "$DEST/.agents/skills"/*; do
     test -e "$skill" || continue
     name=$(basename "$skill")
     ln -sfn "../../.agents/skills/$name" "$DEST/.claude/skills/$name"
 done
 
-printf 'installed factory skills into %s/.agents (merge; dest-only paths kept)\n' "$DEST"
+printf 'installed factory skills into %s/.agents (3-way merge; dest-only paths kept)\n' "$DEST"
 printf 'tracker: '
 sed -n 's/^tracker: //p' "$DEST/.agents/binding" | head -1
+if test "$CONFLICTS" -gt 0; then
+    printf 'install: %s file(s) have conflict markers; fix them before using the skills\n' "$CONFLICTS" >&2
+    exit 1
+fi

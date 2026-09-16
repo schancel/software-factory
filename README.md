@@ -88,7 +88,7 @@ sh path/to/software-factory/install.sh --tracker pyramid /path/to/consuming-repo
 
 `--tracker github` (default) or `pyramid` writes `.agents/binding`. Linear is not a tracker yet ([#17](https://github.com/schancel/software-factory/issues/17)). After install, edit that file if you picked wrong.
 
-That **merges** `.agents/{skills,references,bindings,scripts}` into the dest: factory paths are added, dest-only skills (a food logger, a `cfg` mutex) stay. Existing files are left alone unless you pass `--force`, which overwrites kernel-owned paths only — it still does not delete dest-only names. `--force` does not overwrite `.agents/binding` unless you also pass `--tracker`. After that the copy is yours. Do not submodule this kernel.
+That **merges** `.agents/{skills,references,bindings,scripts}` into the dest, including **into existing `SKILL.md` files**: a three-way merge against `.agents/.factory-base` (the last kernel snapshot). Local paragraphs and kernel updates both stay. Dest-only skills (a food logger, a `cfg` mutex) are never deleted. `--force` takes the kernel file on conflict or when you want to discard local edits on that path. Binding is unchanged unless `--tracker`. Commit `.factory-base` with the dest so the next install can merge. Do not submodule this kernel.
 
 Design notes, including why scoring is default and why one tracker uses a hole for scarce *points* instead, are in [`DESIGN.md`](DESIGN.md).
 
