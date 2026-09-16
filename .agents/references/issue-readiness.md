@@ -22,8 +22,8 @@ For a small documentation fix this can be a paragraph. More detail is justified 
 
 Use only the state needed to make the next action clear:
 
-- `NEEDS_SPECIFICATION`: the outcome or a required decision is missing. Name the question, decision owner, and smallest investigation.
-- `READY`: the outcome, boundaries, proof, and responsible people are clear enough to implement.
+- `NEEDS_SPECIFICATION`: the outcome or a required decision is missing. Name the question, decision owner, and smallest investigation. A proposal (incomplete intake, or a pile of similar reports) stays here until a human accepts the node; grooming and the loop must not dispatch it.
+- `READY`: a human has accepted the node; the outcome, boundaries, proof, and responsible people are clear enough to implement.
 - `IN_PROGRESS`: claimed implementation is underway on an isolated branch/worktree.
 - `REPAIR_IN_PROGRESS`: review found same-contract work that is being corrected.
 - `READY_TO_MERGE`: blockers are zero, one clean review of the current candidate passed, and affected gates pass after integrating current main.
