@@ -102,7 +102,7 @@ def parse_repo(value: str) -> tuple[str, str]:
 
 
 class CycleError(Exception):
-    """blocked_by contains a cycle, so no topological wave exists."""
+    """blocked_by contains a cycle among in-scope issues."""
 
 
 def waves(blocked_by: dict[int, list[int]]) -> list[list[int]]:
@@ -111,13 +111,32 @@ def waves(blocked_by: dict[int, list[int]]) -> list[list[int]]:
     while remaining:
         wave = sorted(number for number, blockers in remaining.items() if not blockers)
         if not wave:
-            raise CycleError("ticket_poset: dependency cycle detected")
+            in_scope = set(remaining)
+            # Out-of-scope blockers keep the dependent unplanned; they are not a cycle.
+            external = [
+                number
+                for number, blockers in remaining.items()
+                if not blockers & in_scope
+            ]
+            if not external:
+                raise CycleError("ticket_poset: dependency cycle detected")
+            for number in external:
+                del remaining[number]
+            continue
         planned.append(wave)
         for number in wave:
             del remaining[number]
         for blockers in remaining.values():
             blockers.difference_update(wave)
     return planned
+
+
+def blocked_after(blocked_by: dict[int, list[int]], planned: list[list[int]]) -> list[int]:
+    """Later waves, then in-scope leftovers waiting on out-of-scope blockers."""
+    planned_ids = {number for wave in planned for number in wave}
+    later = [number for wave in planned[1:] for number in wave]
+    leftover = sorted(number for number in blocked_by if number not in planned_ids)
+    return later + leftover
 
 
 def main() -> int:
@@ -173,7 +192,8 @@ def main() -> int:
         return 0
 
     ready = planned[0] if planned else []
-    blocked = [number for wave in planned[1:] for number in wave]
+    # Leftovers waiting on out-of-scope blockers are blocked, not a dispatch wave.
+    blocked = blocked_after(blocked_by, planned)
 
     print(f"repository {owner}/{name}")
     print(f"open_in_scope {len(issues)}")
