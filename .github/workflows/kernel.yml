@@ -18,3 +18,5 @@ jobs:
       - name: Queue score report tests
         run: python3 .agents/scripts/test_ticket_triage.py
         working-directory: .agents/scripts
+      - name: Ticket poset wave tests
+        run: python3 .agents/scripts/test_ticket_poset.py
