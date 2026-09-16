@@ -108,6 +108,9 @@ If the tracker cannot express blockers as edges, the binding says so and the pos
 | --- | --- |
 | `.agents/scripts/ticket_poset.py` | GitHub `blockedBy` edges → dependency waves. Advisory. |
 | `.agents/scripts/ticket_triage.py` | Scores, missing readiness fields, declared-scope conflicts. Advisory. |
+| `.agents/scripts/issue_export.py` | Open issues → triage JSON (parses scores/files from the body). Advisory. |
+| `.agents/scripts/emit_claim.py` | Prints a `work-claim:v1` comment body. Does not post. |
+| `.agents/scripts/issue_worktree.sh` | Add/remove `.worktrees/issue-N`. Does not claim. |
 | `.agents/scripts/test-skill-docs` | Mechanical lint that the kernel docs still encode the invariants. Advisory; confers no authority. |
 
 Both are GitHub-binding helpers. A Pyramid deployment already computes a frontier (`pyr ready`); it does not run these.

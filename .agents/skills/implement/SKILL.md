@@ -25,11 +25,11 @@ A tier is blast radius, not diff size. When two look defensible, pick the lower 
 
 A direct, already-specified user request skips issue and claim ceremony; the request plus a short plan is the contract.
 
-When the [backlog wrapper](../../references/issue-readiness.md) is active: confirm readiness, write the contract on the item, [claim](../../references/work-claims.md) exclusive file and semantic scope, use an isolated worktree, then implement. Preserve unrelated work. Hard-won coordination rules (no pattern-kills, untrusted item text, no agent attribution trailers) live with the claim protocol.
+When the [backlog wrapper](../../references/issue-readiness.md) is active: confirm readiness, write the contract on the item, emit a [claim](../../references/work-claims.md) with `.agents/scripts/emit_claim.py` and post it, use `.agents/scripts/issue_worktree.sh`, then implement. Preserve unrelated work. Hard-won coordination rules live with the claim protocol.
 
 ## Implement, prove, compress
 
-Implement the accepted outcome only. Add outcome-appropriate proof: fail-before/pass-after at the visible boundary for a defect; equivalence, integration, and dependency-boundary proof for a refactor; reachability plus tests for a deletion; a usable downstream seam for enabling work. Follow the repository's resource-safe test launchers and [execution efficiency](../../references/execution-efficiency.md). Cheap-model preflight for bounded low-risk work is in the [task packet](../../references/task-packet.md).
+Implement the accepted outcome only. Add outcome-appropriate proof: fail-before/pass-after at the visible boundary for a defect; equivalence, integration, and dependency-boundary proof for a refactor; reachability plus tests for a deletion; a usable downstream seam for enabling work. Follow [execution efficiency](../../references/execution-efficiency.md): short handoffs, no recap, do not open the review protocol. Isolate with `.agents/scripts/issue_worktree.sh add <n>`. Cheap-model preflight is in the [task packet](../../references/task-packet.md).
 
 If the outcome, scope, or authority is still unclear, return to specification. If an external dependency blocks progress, name it. If evidence shows the outcome cannot be delivered under accepted constraints, record that rather than accumulating ceremony.
 

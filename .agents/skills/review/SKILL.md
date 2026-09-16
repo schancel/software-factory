@@ -5,7 +5,7 @@ description: Independently review the candidate that will land from risk-derived
 
 # Review
 
-Review the exact candidate that will land, not a moving branch. This is the only skill that lands. Derive perspectives from the actual diff, isolate each perspective, and treat every proposed finding as an unproven hypothesis until a different reviewer verifies a concrete failure path. Stance and stopping rules live in the [review protocol](../../references/review-protocol.md); [engineering judgment](../../references/engineering-judgment.md) is the shape perspective. Load the tracker from [`.agents/binding`](../../references/load-binding.md) before applying a land rule.
+Review the exact candidate that will land, not a moving branch. This is the only skill that lands. Derive perspectives from the actual diff. Open [review-protocol](../../references/review-protocol.md) sections as needed (findings, convergence, land), not as a preamble. Open [engineering judgment](../../references/engineering-judgment.md) only for the shape perspective. Load the tracker from [`.agents/binding`](../../references/load-binding.md) before applying a land rule. Handoff: verdict, findings, reviewed tip. No recap.
 
 Do not use this skill for lightweight prose edits that carry no behavioral claim.
 

@@ -26,7 +26,7 @@ Missing acceptance criteria or owner means `NEEDS_SPECIFICATION`, not merely low
 
 ## Queue construction
 
-On GitHub, run `.agents/scripts/ticket_poset.py --repo owner/name --workers N --format json` for native dependency ordering, then `.agents/scripts/ticket_triage.py` for scores, readiness, and declared-scope conflicts. Write blocked-by edges per the GitHub binding's [blocked-by edges](../../bindings/github.md#blocked-by-edges) paragraph; body prose is not an edge. Dependencies impose ordering; file and semantic overlaps impose a scheduling mutex. Prefer independent tickets in the same dependency-eligible set.
+On GitHub, run `.agents/scripts/ticket_poset.py --repo owner/name --workers N --format json` for native dependency ordering, then `.agents/scripts/issue_export.py --repo owner/name | python3 .agents/scripts/ticket_triage.py` for scores, readiness, and declared-scope conflicts. Write blocked-by edges per the GitHub binding's [blocked-by edges](../../bindings/github.md#blocked-by-edges) paragraph; body prose is not an edge. Dependencies impose ordering; file and semantic overlaps impose a scheduling mutex. Prefer independent tickets in the same dependency-eligible set. Do not hand-build the triage JSON.
 
 On Pyramid, `pyr ready --json` is that report. Do not invent the four-axis score.
 

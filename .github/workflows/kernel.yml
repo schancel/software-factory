@@ -20,3 +20,8 @@ jobs:
         working-directory: .agents/scripts
       - name: Ticket poset wave tests
         run: python3 .agents/scripts/test_ticket_poset.py
+      - name: Issue export and claim-block tests
+        run: |
+          python3 .agents/scripts/test_issue_export.py
+          python3 .agents/scripts/test_emit_claim.py
+        working-directory: .agents/scripts

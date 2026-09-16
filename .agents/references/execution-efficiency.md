@@ -2,11 +2,17 @@
 
 Reduce context and tool-output cost without reducing engineering proof. Do not use hard token budgets that can truncate work, omit evidence, or change priorities.
 
-## Communicate only state changes
+## Prose
 
-Report outcomes, decisions, blockers, failures, review findings, and completed integrations. Omit routine narration and successful intermediate steps. Keep each update brief and independently understandable. Do not repeat facts already present in the current item, pull request, claim, or contract; link the durable record instead.
+Write short. Do not recap the ticket, the packet, or the skill. Do not narrate tool calls or "I will now…". One sentence of status when a state changes; otherwise work silently until the handoff. Prefer a link to a durable record over quoting it.
 
-A final handoff contains only the change, verification, remaining risk, ownership, and next action.
+A final handoff is: commit, gates, remaining risk, owner, next action. Nothing else.
+
+## Load only the next step
+
+Do not open a reference until the current step needs it. Tier 1 does not open the review protocol, the claim protocol, or engineering-judgment. `$implement` does not open the review protocol. `$review` opens protocol sections as needed (findings, convergence, land), not the file as a preamble.
+
+Prefer [the scripts](../scripts/) over composing claim blocks, triage JSON, or worktree paths by hand.
 
 ## Bound discovery and command output
 
