@@ -131,6 +131,14 @@ def waves(blocked_by: dict[int, list[int]]) -> list[list[int]]:
     return planned
 
 
+def blocked_after(blocked_by: dict[int, list[int]], planned: list[list[int]]) -> list[int]:
+    """Later waves, then in-scope leftovers waiting on out-of-scope blockers."""
+    planned_ids = {number for wave in planned for number in wave}
+    later = [number for wave in planned[1:] for number in wave]
+    leftover = sorted(number for number in blocked_by if number not in planned_ids)
+    return later + leftover
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", help="GitHub owner/name (default: current gh repo)")
@@ -184,7 +192,8 @@ def main() -> int:
         return 0
 
     ready = planned[0] if planned else []
-    blocked = [number for wave in planned[1:] for number in wave]
+    # Leftovers waiting on out-of-scope blockers are blocked, not a dispatch wave.
+    blocked = blocked_after(blocked_by, planned)
 
     print(f"repository {owner}/{name}")
     print(f"open_in_scope {len(issues)}")
