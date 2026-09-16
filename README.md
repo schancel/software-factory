@@ -33,30 +33,30 @@ Related, from earlier and still the point: [working memory is about seven chunks
 ## How the graph runs
 
 ```text
-report / idea
-    │
-    ▼
-ticket-creation ──► backlog-grooming ──► backlog-loop
-    (one item;          scores,             replenish N
-     proposals are      blockers,           workers from
-     not ready)         packets             the frontier)
-                                              │
-                                              ▼
-                                          implement
-                                              │
-                         coordinate ──► isolated worktrees,
-                         (siblings,     claims, frozen
-                          contracts)    interfaces
-                                              │
-                                              ▼
-                                           review
-                                    (may split, stack,
-                                     or file follow-ups)
-                                              │
-                                              ▼
-                                      codebase-audit
-                                       (occasionally)
+report / idea ──┐
+                ▼
+          ticket-creation ──► backlog-grooming ──► backlog-loop
+          (one item;              scores,           replenish N
+           proposals are          blockers,         workers from
+           not ready)             packets           the frontier)
+                ▲                                     │
+                │                                     ▼
+                │                                 implement
+                │                                     │
+                │                    coordinate ──► worktrees,
+                │                    (siblings,     claims,
+                │                     contracts)    frozen interfaces
+                │                                     │
+                │                                     ▼
+                │                                  review ──► land
+                │                           (split / stack, or
+                │                            file follow-ups) ──┐
+                │                                               │
+                └──────── codebase-audit (occasionally) ────────┘
+                          review follow-ups ─────────────────────┘
 ```
+
+Audit and review do not ship code. They file tickets. Those re-enter at `ticket-creation`. Audit is not a step after every merge.
 
 | Skill | Owns | Refuses |
 | --- | --- | --- |
