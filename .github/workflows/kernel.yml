@@ -27,3 +27,5 @@ jobs:
           python3 .agents/scripts/test_issue_export.py
           python3 .agents/scripts/test_emit_claim.py
         working-directory: .agents/scripts
+      - name: Worktree add stdout tests
+        run: python3 .agents/scripts/test_issue_worktree.py

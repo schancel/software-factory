@@ -24,7 +24,7 @@ case $ACTION in
     add)
         BASE=${3:-HEAD}
         mkdir -p "$ROOT/.worktrees"
-        git worktree add -b "$BRANCH" "$DIR" "$BASE"
+        git worktree add -b "$BRANCH" "$DIR" "$BASE" >&2
         printf '%s\n' "$DIR"
         ;;
     remove)
