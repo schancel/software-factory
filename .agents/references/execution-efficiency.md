@@ -14,6 +14,18 @@ Do not open a reference until the current step needs it. Tier 1 does not open th
 
 Prefer [the scripts](../scripts/) over composing claim blocks, triage JSON, or worktree paths by hand.
 
+## Prompt cache
+
+xAI caches a byte-identical *prefix* of the messages array (sticky routing via `x-grok-conv-id` / `prompt_cache_key`). Within one worker that already happens: later tool turns hit cache. Across parallel `$implement` workers it currently does not — Grok Build puts the worktree path in the system prefix, which differs per worker.
+
+Do this:
+
+- Repair the same ticket with `resume_from` the implementer, not a new agent. That reuses the worker's prefix.
+- Point at skills by path. Do not paste `SKILL.md` into the packet.
+- Keep the packet *header* identical for every `$implement` worker (skill path, tracker, efficiency, do-not-merge). Unique fields (issue, SHA, scope) come last, so a future harness that moves cwd out of the system prefix can hit.
+
+Do not share a conversation id across two workers that must not see each other's tools or files.
+
 ## Bound discovery and command output
 
 Search narrowly before opening a file and read only relevant ranges of large files. Bound command output and filter compiler or test output to result summaries and actionable failures. Never paste complete issue histories, CI logs, warning streams, diffs, or source files into conversation. Retain the exact failure, relevant state, and reproduction command needed to understand and repeat the problem.

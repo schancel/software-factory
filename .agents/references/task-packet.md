@@ -2,7 +2,7 @@
 
 Give a collaborator enough context to act safely without making them reconstruct the project plan. Keep the packet proportional to the delegated change.
 
-Send the packet, not the coordinator's conversation history. Include only the files, interfaces, base revision, constraints, and proof relevant to the worker's bounded scope. Do not assign duplicate investigations or overlapping file or semantic scopes. Ask for conclusions and actionable diagnostics, not raw exploration logs, and keep independent coordinator work moving.
+Send the packet, not the coordinator's conversation history. Include only the files, interfaces, base revision, constraints, and proof relevant to the worker's bounded scope. Do not assign duplicate investigations or overlapping file or semantic scopes. Ask for conclusions and actionable diagnostics, not raw exploration logs, and keep independent coordinator work moving. Same-ticket repair uses the existing worker (`resume_from`), not a second packet. `$implement` packets share one byte-stable header; unique issue fields come last ([prompt cache](execution-efficiency.md)).
 
 ## Minimum packet
 
