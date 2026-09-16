@@ -42,6 +42,17 @@ A known defect in the same area outranks a feature that touches it, unless the f
 
 Incidental dead code found along the way becomes its own deletion ticket, naming the exact code and the evidence that nothing reaches it. It does not ride along.
 
+## Boy scout, as its own ticket
+
+Leave the campground better — **not in the same landing as the feature**. Cleanup and refactor are good work. Mixed into the feature they make review stall (the runaway we already forbade).
+
+Either:
+
+- **Before** the feature, as a stack: tests that pin current behavior, then the refactor, then the feature. Each lands. "Make the change easy, then make the easy change."
+- **After**, as a follow-up ticket, if the feature does not need the cleanup in order to ship.
+
+Do not "while I'm here" into the feature diff. Review that finds campground work files a ticket or splits a stacked predecessor; it does not grow the candidate.
+
 ## Chunkability (Miller's seven)
 
 A reader — human or model — holds about seven chunks in working memory. Structure code so each layer is loadable as a handful of independent pieces. This is not numerology; it is why [unwieldy functions accrete](https://schancel.github.io/2019-07-14-software-and-magic-number-seven.html) from progressive addition.
@@ -65,7 +76,7 @@ The module-boundary version of the same idea: an agent changing one module shoul
 
 Dependency injection, separation of concerns, and "keep it simple" are names for these questions. They are not a checklist. A constructor that takes the one database the process has is fine. A constructor that takes an interface "so we can test" is fine when the test would otherwise need the world; it is not fine when the interface exists only to look SOLID.
 
-Do not treat SOLID, DRY, or "leave the campground better" as a diff checklist. Drive-by cleanup is out of contract (see bugs before features). [The wrong abstraction is worse than duplication](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction) — three calls to a bad helper are not the rule of three.
+Do not treat SOLID or DRY as a per-diff checklist. [The wrong abstraction is worse than duplication](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction) — three calls to a bad helper are not the rule of three.
 
 ## States, names, and the edge
 
