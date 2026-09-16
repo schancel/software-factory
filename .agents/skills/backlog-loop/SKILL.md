@@ -9,7 +9,7 @@ Use this skill when asked to work through the backlog or keep multiple ticket wo
 
 Load the tracker from [`.agents/binding`](../../references/load-binding.md) before any tracker verb. Pool mechanics: [parallel coordination](../../references/parallel-coordination.md).
 
-Maintain at most the requested worker count. Dispatch [eligible](../../references/queue.md#eligible-work) tickets until full. As soon as any worker finishes, record its result, release or hand off its claim, refresh the item/poset state, and dispatch the next eligible ticket immediately. Dependency waves are ordering constraints, not barriers.
+Maintain a pool no larger than this machine can compile and test at once (cores, RAM, how heavy this repo's suite is). A user-stated count wins; otherwise use the consuming repo's `AGENTS.md` default if it has one. Dispatch [eligible](../../references/queue.md#eligible-work) tickets until that ceiling. As soon as any worker finishes, record its result, release or hand off its claim, refresh the item/poset state, and dispatch the next eligible ticket immediately. Dependency waves are ordering constraints, not barriers.
 
 On GitHub, `.agents/scripts/ready_queue.py --workers N --format json` is the dispatchable set: READY items in dependency order, `NEEDS_SPECIFICATION` omitted. Do not intersect `ticket_poset.py` and `ticket_triage.py` by hand. On Pyramid, `pyr ready --json` is that report — do not invent scores. Isolate workers with `.agents/scripts/issue_worktree.sh`.
 

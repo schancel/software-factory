@@ -36,27 +36,31 @@ Related, from earlier and still the point: [working memory is about seven chunks
 report / idea ──┐
                 ▼
           ticket-creation ──► backlog-grooming ──► backlog-loop
-          (one item;              scores,           replenish N
-           proposals are          blockers,         workers from
-           not ready)             packets           the frontier)
+          (one item;              scores,           eligible work
+           proposals are          blockers,         from the frontier
+           not ready)             packets)
                 ▲                                     │
-                │                                     ▼
-                │                                 implement
-                │                                     │
-                │                    coordinate ──► worktrees,
-                │                    (siblings,     claims,
-                │                     contracts)    frozen interfaces
-                │                                     │
-                │                                     ▼
-                │                                  review ──► land
-                │                           (split / stack, or
-                │                            file follow-ups) ──┐
-                │                                               │
-                └──────── codebase-audit (occasionally) ────────┘
-                          review follow-ups ─────────────────────┘
+                │                    pool sized by this machine:
+                │                    cores, RAM, compile/test cost
+                │                         ┌───────┼───────┐
+                │                         ▼       ▼       ▼
+                │                    implement implement implement …
+                │                    (worktree)(worktree)(worktree)
+                │                         └───────┬───────┘
+                │                                 ▼
+                │                    coordinate (siblings of one
+                │                    outcome fan out the same way,
+                │                    then join)
+                │                                 ▼
+                │                              review ──► land
+                │                       (split / stack, or
+                │                        file follow-ups) ──┐
+                │                                           │
+                └──── codebase-audit (occasionally) ────────┘
+                      review follow-ups ─────────────────────┘
 ```
 
-Audit and review do not ship code. They file tickets. Those re-enter at `ticket-creation`. Audit is not a step after every merge.
+Eligible tickets (and siblings of one outcome) fan out to parallel `$implement` workers, each in its own worktree, then join for `$review`. How many at once is this laptop and this repo's tests, not a magic N. Audit and review do not ship code. They file tickets. Those re-enter at `ticket-creation`. Audit is not a step after every merge.
 
 | Skill | Owns | Refuses |
 | --- | --- | --- |

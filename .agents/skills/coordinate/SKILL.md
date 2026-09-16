@@ -19,7 +19,7 @@ Record ownership with the [work-claim protocol](../../references/work-claims.md)
 
 ## Decompose for bounded context
 
-Use [parallel coordination](../../references/parallel-coordination.md) when two or more independently testable workstreams can proceed without concurrent ownership of the same files or semantic boundary. Keep work local when decomposition would add more interface negotiation than useful isolation.
+Use [parallel coordination](../../references/parallel-coordination.md) when two or more independently testable workstreams can proceed without concurrent ownership of the same files or semantic boundary. Fan out to `$implement` workers (one worktree each), then join before `$review`. How many at once is this machine and this repo's tests, same ceiling as `$backlog-loop`. Keep work local when decomposition would add more interface negotiation than useful isolation.
 
 The coordinator owns decomposition, shared interface decisions, dependency order, collision checks, integration, and completion evidence. Each delegated worker receives a [task packet](../../references/task-packet.md) with exclusive scope and returns a narrow handoff. Workers must not silently expand across another worker's subsystem or integrate sibling work themselves unless their packet grants that role.
 

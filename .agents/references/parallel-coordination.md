@@ -45,7 +45,7 @@ Represent dependencies explicitly as tracker `blocks` relationships or an equiva
 
 A poset of tickets produces dependency-ordered waves. Treat that as a pool, not a batch plan:
 
-- Dispatch up to the agreed worker ceiling (small enough that test fan-out does not saturate the machine; 3–6 is a workable bound unless the user stated another).
+- Dispatch up to a worker ceiling **sized for this machine and this repo**: how many compiles and test suites can run at once without thrashing RAM or the disk. A docs-only change can run more workers than a full language build. The user-stated N wins. A consuming `AGENTS.md` may name a default for this repo (and any mutex that serializes a browser or a store). There is no kernel-wide magic number.
 - When one worker's handoff is integrated, immediately dispatch the next highest eligible item from a refreshed frontier. Never wait for a whole wave to finish, and never treat two items that merely appear in the same wave as related.
 - Refresh after every integration or status change: landing one item can make dependents eligible and can retire items a human moved or canceled.
 - File and semantic overlaps impose a scheduling mutex even when both items are dependency-eligible.
