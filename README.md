@@ -1,79 +1,83 @@
 # Software factory
 
-A portable set of coding skills for agent-assisted engineering: intake, contracts, claims, a scored dependency-aware queue, proportional review, and a periodic audit of the tree itself.
+After language models, writing the code stopped being the slow part. Deciding *what* to build, in what order, without two agents editing the same files, and without the model taking the shortest path that makes a test pass — that became the slow part.
 
-The leverage is not the model. Generation scales with spend; review and decision latency do not. These skills are the system around the agent — the part that decides what to work on, how to isolate it, what proof it owes, and when to stop.
+The popular fix is a loop: one agent, one prompt file, persist via git, repeat until a completion promise fires. That is a good way to finish **one** well-specified job. It is a bad scheduler. It cannot say “these three are independent,” “those two share a semantic boundary,” or “do not start this until that lands.”
 
-They were extracted from three production repositories (Finch, which is public at [darwin-finch/finch](https://github.com/darwin-finch/finch); two private siblings) after each independently grew the same four artifacts: a solution contract, a task packet, a review protocol, and a work claim. This repository is the generic kernel. GitHub Issues is the default binding. Other trackers plug in as bindings; they do not fork the kernel.
+This repo is the other shape: a **work graph**. Tickets are nodes. Blockers are edges. Claims are locks. Each worker still runs a loop. The graph is what *schedules* the loops. Two laptops can share that graph if they share a tracker; the claim comment is a lock, not a distributed consensus protocol.
 
-Copy `.agents/` into a repository and point agents at it. Tooling here is advisory mechanical lint, never an authority engine. People remain accountable for readiness, ownership, approval, merge, and closure.
+It is not an agent-runtime graph. Nodes here are work items, not prompt steps. There is no daemon and no new tracker. GitHub Issues is the default. The rest is markdown an agent already knows how to load, plus two small scripts that *report* a queue and do not claim, merge, or close anything.
 
-## The loop
+## The bottleneck moved twice
 
-```text
-idea / bug
-    │
-    ▼
-ticket-creation ──► backlog-grooming ──► backlog-loop
-                         │                    │
-                         │                    ▼
-                         │                 implement
-                         │                    │
-                         │         coordinate (contracts, claims,
-                         │          packets, isolated worktrees)
-                         │                    │
-                         │                    ▼
-                         │                 review
-                         │                    │
-                         └── new tickets ◄────┘
-                                              │
-                                              ▼
-                                       codebase-audit
-                                       (occasionally)
-```
+Before LLMs, the scarce resource was production. After them, it was humans: review, decisions, glue, noticing the bug. Generation scales with spend. Review does not.
 
-| Skill | When to load it |
-| --- | --- |
-| [`ticket-creation`](.agents/skills/ticket-creation/SKILL.md) | Someone described a bug, regression, or improvement. Outcome is a ticket, not a patch. |
-| [`backlog-grooming`](.agents/skills/backlog-grooming/SKILL.md) | Rank, block, and packetize the queue. Does not implement. |
-| [`backlog-loop`](.agents/skills/backlog-loop/SKILL.md) | Keep a bounded pool of workers busy on the poset. |
-| [`implement`](.agents/skills/implement/SKILL.md) | Code one ready packet or a direct specified request. Hands off to review. |
-| [`coordinate`](.agents/skills/coordinate/SKILL.md) | Parallel workers, exclusive scope, frozen interfaces, integration ownership. |
-| [`review`](.agents/skills/review/SKILL.md) | Multi-perspective review of the candidate that will land. May split, stack, or file follow-ups. |
-| [`codebase-audit`](.agents/skills/codebase-audit/SKILL.md) | Occasional whole-tree look: dead code, missing seams, patterns that have earned an abstraction, modules nobody can hold in working memory. |
+In the repositories I run, spending the human hour *up front* — on tickets, contracts, and the shape of the data model — inverted that again. I can file well-scoped work faster than agents drain it. That is an observation from one person’s factory, not a study. The mechanism is not “remove the human.” It is that one hour of architecture now produces a graph many workers can consume, so the queue fills from intake and empties at generation speed.
 
-Shared facts live in [`.agents/references/`](.agents/references/). Skills point there. Do not restate them.
+I still pick the framework and the structure. I do not have to notice every crash, or type every “this should be an enum.” Filing is cheap. Landing is not free. A report is not a ready ticket. A pile of similar reports is a proposal until someone accepts what the node is allowed to mean.
 
-## Holes, not frameworks
+## Shortest path is the default, and it is the wrong default for data models
 
-Agents default to the shortest path that makes a test pass. The existing factory already fights *too much* process; it did not fight *the wrong shape*.
+Left alone, a model ships the local edit that greens the test. That is correct for a typo. It is wrong for a schema, an identity, or a module boundary. The fix six months later is a migration, not a rename.
 
 Two futures get confused:
 
-- **An abstraction for a caller you do not have** (adapter interface, plugin registry, generic `Manager`) — wait until you have built the similar thing three times. [The rule of three](https://holdenrehg.com/blog/2021-09-20_rule-of-three) is a warning sign, not a law.
-- **The shape of the durable record** (identity, cardinality, ownership, public format) — if this is wrong, the fix is a migration. Leave the hole now. A column you add later is cheap; a primary key you have to change is not.
+- **A framework for a caller you do not have** — adapter interfaces, plugin registries, a `Manager` whose only job is to look like architecture. Wait until you have built the similar thing three times. [The rule of three](https://holdenrehg.com/blog/2021-09-20_rule-of-three) is a warning sign, not a law.
+- **The shape of the durable record** — identity, cardinality, ownership, public format. If this is wrong, you migrate. Leave the hole now. A column you add later is cheap; a primary key you have to change is not.
 
-The test is cost of reversal, not taste. It lives in one place: [`engineering-judgment.md`](.agents/references/engineering-judgment.md). The solution contract, the review, and the audit all load it. A principles file that nothing invokes does not fire.
+The test is cost of reversal, not taste: *if this is wrong in six months, is the fix a local edit or a migration?* That question lives in one file, [`engineering-judgment.md`](.agents/references/engineering-judgment.md), and is loaded by the contract, the review, and an occasional whole-tree audit. A principles document that nothing invokes does not fire.
 
-Related: [Miller's number](https://schancel.github.io/2019-07-14-software-and-magic-number-seven.html) as a chunkability constraint, and [code review as editing](https://schancel.github.io/2019-07-14-code-reviews-incomplete-guide.html) rather than as a gate.
+Related, from earlier and still the point: [working memory is about seven chunks](https://schancel.github.io/2019-07-14-software-and-magic-number-seven.html), and [a code review is an edit, not a gate](https://schancel.github.io/2019-07-14-code-reviews-incomplete-guide.html).
 
-## Bindings
+## How the graph runs
 
-The kernel talks in *items, claims, contracts, packets, scores, and a frontier*. A binding names how those map onto a tracker.
+```text
+report / idea
+    │
+    ▼
+ticket-creation ──► backlog-grooming ──► backlog-loop
+    (one item;          scores,             replenish N
+     proposals are      blockers,           workers from
+     not ready)         packets             the frontier)
+                                              │
+                                              ▼
+                                          implement
+                                              │
+                         coordinate ──► isolated worktrees,
+                         (siblings,     claims, frozen
+                          contracts)    interfaces
+                                              │
+                                              ▼
+                                           review
+                                    (may split, stack,
+                                     or file follow-ups)
+                                              │
+                                              ▼
+                                      codebase-audit
+                                       (occasionally)
+```
 
-| Binding | Tracker | Ranking |
+| Skill | Owns | Refuses |
 | --- | --- | --- |
-| [`github`](.agents/bindings/github.md) (default) | GitHub Issues + PR claim comments | `(value × certainty × (1 + unblocking)) / cost` |
-| [`pyramid`](.agents/bindings/pyramid.md) | `pyr` on a live deployment | Domain-enforced frontier today; scarce *points* later, as internal cost accounting |
+| [`ticket-creation`](.agents/skills/ticket-creation/SKILL.md) | Evidence-based item on the tracker | Implementation |
+| [`backlog-grooming`](.agents/skills/backlog-grooming/SKILL.md) | Readiness, scores, blockers, packets | Shipping |
+| [`backlog-loop`](.agents/skills/backlog-loop/SKILL.md) | A bounded pool over the dependency graph | Merging because a worker said it was done |
+| [`implement`](.agents/skills/implement/SKILL.md) | One ready packet → a reviewable candidate | Queue policy, review |
+| [`coordinate`](.agents/skills/coordinate/SKILL.md) | Exclusive scope, frozen interfaces, sibling integration | Choosing *which* item |
+| [`review`](.agents/skills/review/SKILL.md) | Perspectives, confirmation, split/stack | Implementing the original ticket |
+| [`codebase-audit`](.agents/skills/codebase-audit/SKILL.md) | Whole-tree dead code, collapsed seams, earned abstractions | A refactor in place |
 
-A consuming repo that is not on GitHub Issues records its binding in `AGENTS.md` (or `.agents/binding`) and substitutes verbs. It does not copy and edit the kernel.
+Ready work is scored, on the item, as `(value × certainty × (1 + unblocking)) / cost`. Cheap, certain, unblocking changes go first because **review attention is the scarce half of cost**. A missing owner or acceptance criteria is not “low priority”; it is not ready. Bugs in the same area outrank the feature that touches them.
 
-Scoring is part of the kernel. A binding may replace the ranking function; it may not invent scores the tracker does not store, and it may not skip readiness. Pyramid's points are a different answer to the same problem — capacity as a scarce currency — not a reason to drop ranking from the default loop.
+Scripts under [`.agents/scripts/`](.agents/scripts/) print a dependency-ordered frontier and flag missing readiness fields. They do not assign work. People remain accountable for readiness, ownership, approval, merge, and closure.
 
-## Using this in another repository
+The old all-in-one `backlog` skill is not here. It was doing five jobs, so agents loaded it for the wrong one.
+
+## Use it
 
 ```sh
-# from the consuming repo
+git clone https://github.com/schancel/software-factory
+# from the consuming repo:
 mkdir -p .agents
 cp -R path/to/software-factory/.agents/skills \
       path/to/software-factory/.agents/references \
@@ -82,16 +86,15 @@ cp -R path/to/software-factory/.agents/skills \
       .agents/
 ```
 
-Then:
+Point agents at `.agents/skills/`. GitHub Issues is the default binding. Another tracker is a binding file, not a fork of the skills. Product-specific lore (a lookup that must not return zero, a `private/` tree, a language-specific build mutex) stays in *that* repo’s `AGENTS.md`.
 
-1. Keep GitHub Issues as the tracker, or name another binding in `AGENTS.md`.
-2. Point `scripts/factory/gates` (or equivalent) at your real gate stages. Packets name a stage, never a recited command line.
-3. Do not copy product-specific lore (a lookup that must not return zero, a `private/` tree, a `cfg` pitfall) into the kernel. That lore belongs in the consuming repo's `AGENTS.md`.
-
-Finch, Daybook, and Pyramid still carry their own copies. They will thin to adapters after this kernel is something you would actually point a post at.
+Design notes, including why scoring is default and why one tracker uses a hole for scarce *points* instead, are in [`DESIGN.md`](DESIGN.md).
 
 ## What this is not
 
-- Not an authority engine. Scripts report; they do not claim, merge, or close.
-- Not a prompt pack for "write the feature." Intake, isolation, proof, and a merge gate are the product.
-- Not IMPRD. The writing methodology is a sibling; the review skill is the same idea applied to a diff (independent perspectives, iterate to a stopping rule).
+- Not a replacement for engineering. Architecture, framework choice, and what a ticket is allowed to mean stay human. Intake does not.
+- Not a hosted factory, an MCP server, or a new Jira.
+- Not a prompt pack for “write the feature.” Isolation, proof, and a merge gate are the product.
+- Not authority. A green script is not permission to merge.
+
+MIT. Extracted from production use, including public [Finch](https://github.com/darwin-finch/finch).
