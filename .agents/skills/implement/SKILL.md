@@ -19,7 +19,7 @@ Name the tier in the first message about the change.
 | **2 — ordinary** | a bounded code change with a clear approach and a test that fails before it | a short [contract](../../references/solution-contract.md), gate stages the scope touches, then `$review`. |
 | **3 — risky** | authority, credentials, persistence, wire formats, concurrency, release, or data loss | full contract, production-boundary regression, `$review` of the candidate that will land. Include the [shape questions](../../references/engineering-judgment.md) when the durable record changes. |
 
-A tier is blast radius, not diff size. When two look defensible, pick the lower one and say why. If the diff grows into a higher tier, say so and raise it.
+A tier is blast radius, not diff size. When two look defensible, pick the lower one and say why. If the diff grows into a higher tier, say so and raise it. A **correction inherits the blast radius of what it touches**. Two lines that change a stored number or a derived total are not tier 1 because they arrived labelled "the fix."
 
 ## Direct request vs backlog wrapper
 

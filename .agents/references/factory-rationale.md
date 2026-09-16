@@ -6,6 +6,7 @@ Read this only when changing the workflow itself. These safeguards answer failur
 | --- | --- |
 | Two workers began the same issue after both saw it as free. | Publish and verify one immutable claim before editing shared issue work. |
 | A regression passed because it ran only on the fixed tip. | Run it against an isolated base and the candidate, recording both results. |
+| Two "fix" commits each introduced a new error; reviewers trusted the PR story. | A correction is not a lower bar. Verify against original evidence and the actual diff, not the commit message. Derived-data repos add a recompute-from-inputs gate locally. |
 | A replacement left an adapter and duplicate implementation indefinitely. | Name create/switch/delete stages, an owner and a removal trigger before review. |
 | Repeated process reviews added ceremony without changing the patch. | Stop after the first clean risk-proportional review round. |
 | A wording fix consumed a feature's process. | Name the tier and run only that tier. |

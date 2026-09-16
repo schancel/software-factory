@@ -23,6 +23,10 @@ Choose perspectives from the diff:
 
 Do not summon extra reviewers or rounds just to satisfy a number. A wording fix may need no independent perspective. A permission check needs several, including shape if it changes who an object belongs to.
 
+**A correction is not a lower bar.** "This is the fix" is a label, not evidence. A wrong correction propagates as fast as the original error. The reviewer verifies against the **original evidence** (the reproduction, the raw inputs, the observed failure on base) — not against the PR description or the commit message. Check that the claimed change is the actual diff. Fail-before on base still applies.
+
+When the repo stores derived figures (totals, daily values, rollups), a mechanical gate that recomputes touched rows from their stated inputs belongs in **that repo's** factory gates. This kernel does not invent a nutrition checker.
+
 Match proof to the outcome: user-facing behavior needs user-visible proof; refactoring needs equivalence, integration, and dependency proof; deletion needs reference/reachability evidence plus tests; enabling work needs a usable downstream seam.
 
 Before review, confirm the architecture and compression pass ran: remove safe duplication, speculative abstractions, and implementation-mirroring tests. Prefer the simplest coherent resulting architecture, not the fewest changed lines. A bounded larger patch can be better when it removes competing representations or compatibility machinery and establishes one clear ownership boundary. Compression must not remove wanted behavior, weaken meaningful regression coverage, mix unrelated work, or [flatten a named seam](engineering-judgment.md).
