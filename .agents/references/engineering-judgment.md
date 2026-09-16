@@ -65,6 +65,19 @@ The module-boundary version of the same idea: an agent changing one module shoul
 
 Dependency injection, separation of concerns, and "keep it simple" are names for these questions. They are not a checklist. A constructor that takes the one database the process has is fine. A constructor that takes an interface "so we can test" is fine when the test would otherwise need the world; it is not fine when the interface exists only to look SOLID.
 
+Do not treat SOLID, DRY, or "leave the campground better" as a diff checklist. Drive-by cleanup is out of contract (see bugs before features). [The wrong abstraction is worse than duplication](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction) — three calls to a bad helper are not the rule of three.
+
+## States, names, and the edge
+
+Ask, when the diff invents a type, a name, or a check:
+
+- **Can this value be nonsense?** A boolean pair that can be `true, true`, a string that is "really" an id, a status plus a flag that repeats the status. Prefer a type that cannot say that. This is the hole in type form: make illegal states unrepresentable.
+- **Is the name a job title with no job?** `Manager`, `Utils`, `Helper`, `data`, `Handler` wrapping one call. The missing module is usually nearby; the name is covering it.
+- **Is this checked at the edge once, or all the way down?** Parse (or reject) at the boundary; the inside of the module should see a typed value, not re-validate a string. Scattered `if !valid` is not a hole, it is fear.
+- **Are we faster in theory?** Caches, pools, thread locals, and "hot path" rewrites without a measured problem are frameworks. Wait.
+
+A public payload, a stored row, and a log line are promises. Compatibility is cost of reversal, already above. Do not add Postel's law as "be liberal in what you accept" — tolerant readers hide broken writers.
+
 ## What a contract should say that a ticket usually does not
 
 When the change touches a durable record, the [solution contract](solution-contract.md) names:
