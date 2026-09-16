@@ -117,17 +117,17 @@ Both are GitHub-binding helpers. A Pyramid deployment already computes a frontie
 
 ## Adoption
 
-Consuming repos run `install.sh <repo>` (or copy `.agents/{skills,references,bindings,scripts}` and symlink `.claude/skills`). They set `.agents/binding`. Product-specific hard rules — language build mutexes, platform-only compiler warnings, serialized browser suites — stay in that repo's `AGENTS.md`. They are not the loop.
+Consuming repos **vendor** a snapshot. They run `install.sh <repo>` once (or copy `.agents/{skills,references,bindings,scripts}` and symlink `.claude/skills`), set `.agents/binding`, and then own the tree. Product-specific hard rules — language build mutexes, serialized browser suites, `pyr` verbs, scoring vs points — are local edits, not a fork of this git history.
+
+Do not submodule. A live pointer to this kernel would fight the reason to copy: Finch, Daybook, and Pyramid already adapted the loop and must keep doing so. `install.sh --force` replaces the four directories; it is not a merge. Pulling kernel updates is a diff the consuming repo applies by hand.
 
 ## Open questions
 
-None that block v1. Later, when Finch/Daybook/Pyramid migrate: whether they submodule this repo, vendor a snapshot, or keep a thin adapter that points here. Not decided; not needed to publish.
+None that block v1. Vendoring is decided.
 
 ## PR Plan
 
-This repository is the first commit of the kernel. Subsequent work, if any:
-
-1. **Publish v1** — this tree, public under `schancel/software-factory`, MIT.
-2. **Blog post** — out of repo; links here, to engineering-judgment, and to the three source essays.
-3. **Migrate Finch/Daybook** — thin their `.agents/skills` to GitHub-binding adapters over this kernel. Depends on (1) being stable in use.
-4. **Migrate Pyramid** — binding over `pyr`, ranking hole left for points. Depends on (3) proving the adapter pattern, not on points existing.
+1. **Publish v1** — done (`schancel/software-factory`, MIT).
+2. **Blog post** — out of repo.
+3. **Vendor into Finch/Daybook** — copy the snapshot, delete the overlapping legacy skills, keep machine-local lore in `AGENTS.md`.
+4. **Vendor into Pyramid** — same, with `tracker: pyramid` and the points hole. Depends on (3) only as a rehearsal, not on points existing.

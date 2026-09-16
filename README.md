@@ -80,7 +80,7 @@ git clone https://github.com/schancel/software-factory
 sh path/to/software-factory/install.sh /path/to/consuming-repo
 ```
 
-That copies `.agents/{skills,references,bindings,scripts}`, writes `.agents/binding` if missing (`tracker: github`), and symlinks `.claude/skills` so Claude Code sees the same skills. Point agents at `.agents/skills/`. Change `.agents/binding` to use another tracker; do not fork the skills. Language-specific build mutexes, serialized test browsers, and other machine lore stay in *that* repo’s `AGENTS.md`.
+That copies `.agents/{skills,references,bindings,scripts}`, writes `.agents/binding` if missing (`tracker: github`), and symlinks `.claude/skills` so Claude Code sees the same skills. After that the copy is yours: adapt skills, bindings, and scores to the repo. Do not submodule this kernel — a live pointer would freeze the adaptations. `install.sh --force` replaces those directories; it is not a merge of your edits. Language-specific build mutexes and other machine lore stay in *that* repo’s `AGENTS.md`.
 
 Design notes, including why scoring is default and why one tracker uses a hole for scarce *points* instead, are in [`DESIGN.md`](DESIGN.md).
 
