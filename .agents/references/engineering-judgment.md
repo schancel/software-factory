@@ -42,16 +42,17 @@ A known defect in the same area outranks a feature that touches it, unless the f
 
 Incidental dead code found along the way becomes its own deletion ticket, naming the exact code and the evidence that nothing reaches it. It does not ride along.
 
-## Boy scout, as its own ticket
+## Required stack vs boy scout
 
-Leave the campground better — **not in the same landing as the feature**. Cleanup and refactor are good work. Mixed into the feature they make review stall (the runaway we already forbade).
+If the **feature requires a refactor or a migration**, that is not one implementation. It is a stack of landings, still one outcome:
 
-Either:
+1. Tests that pin current behavior (so the refactor cannot cheat).
+2. The refactor and/or migration.
+3. The feature.
 
-- **Before** the feature, as a stack: tests that pin current behavior, then the refactor, then the feature. Each lands. "Make the change easy, then make the easy change."
-- **After**, as a follow-up ticket, if the feature does not need the cleanup in order to ship.
+Each step is its own candidate, its own review, its own squash. The parent ticket stays open until the stack is on `main`. "Make the change easy, then make the easy change." `$implement` that discovers it needs a migration in the same diff **stops and splits**; it does not mix steps 2 and 3.
 
-Do not "while I'm here" into the feature diff. Review that finds campground work files a ticket or splits a stacked predecessor; it does not grow the candidate.
+**Boy scout** is different: leave the campground better when the feature does *not* need that cleanup to ship. File it for later. Do not "while I'm here" into the feature landing. Review that finds campground work files a ticket; review that finds a *required* refactor splits a stacked predecessor.
 
 ## Chunkability (Miller's seven)
 

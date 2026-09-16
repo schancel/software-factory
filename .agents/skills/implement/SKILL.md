@@ -33,7 +33,9 @@ Implement the accepted outcome only. Add outcome-appropriate proof: fail-before/
 
 If the outcome, scope, or authority is still unclear, return to specification. If an external dependency blocks progress, name it. If evidence shows the outcome cannot be delivered under accepted constraints, record that rather than accumulating ceremony.
 
-Before `$review`, compress: remove duplication, speculative abstractions, and tests that merely mirror the implementation. Prefer a coherent result over a mechanically small diff. Do not [flatten a named seam](../../references/engineering-judgment.md). Incidental dead code becomes its own deletion ticket; it does not widen this change. Staged replacements use create / switch / delete with an owner and removal trigger.
+Before `$review`, compress: remove duplication, speculative abstractions, and tests that merely mirror the implementation. Prefer a coherent result over a mechanically small diff. Do not [flatten a named seam](../../references/engineering-judgment.md). Incidental dead code becomes its own deletion ticket; it does not widen this change.
+
+If this outcome **requires** a refactor or a migration, do not mix it with the feature. Stack: tests that pin behavior, then the refactor/migration, then the feature. Each lands. Staged replacements use create / switch / delete with an owner and removal trigger. Boy scout cleanup that the feature does not need is a later ticket.
 
 ## Hand off
 

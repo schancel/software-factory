@@ -78,7 +78,7 @@ Stack (dependent pull requests, or a linear series of per-feature squashes) when
 
 If a repair approach repeatedly fails, diagnose the cause and change the approach. There is no fixed attempt count that proves infeasibility, and agent failure is not evidence that the requested outcome cannot be built.
 
-New work discovered in review — a missing hole, a third copy of a pattern, a bug in the same area, campground cleanup — is a ticket, filed through [ticket-creation](../skills/ticket-creation/SKILL.md), not a silent widening of the candidate. If the feature needs that cleanup first, split a stacked predecessor: tests that pin behavior, then the refactor, then the feature. Each lands.
+New work discovered in review — a missing hole, a third copy of a pattern, a bug in the same area, campground cleanup — is a ticket, filed through [ticket-creation](../skills/ticket-creation/SKILL.md), not a silent widening of the candidate. If the *feature cannot ship without* a refactor or migration, that is not boy scout: split a stacked predecessor (tests that pin behavior, then the refactor/migration, then the feature). Each lands. The parent stays open until the stack is done.
 
 ## Stop on a rule, not on fatigue
 

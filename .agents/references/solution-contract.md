@@ -15,6 +15,7 @@ Record:
 - important correctness, security, compatibility, or lifecycle invariants;
 - outcome-appropriate proof: fail-before/pass-after and user-visible behavior for a bug fix; refactor equivalence, integration, and dependency-boundary proof; deletion reference/reachability plus tests; a usable downstream seam for enabling work;
 - for replacement work, the replacement, integration switch, and predecessor-deletion stages;
+- when the outcome requires a refactor or migration: the stack as separate landings (tests that pin current behavior, then the refactor/migration, then the feature); the parent stays open until that stack is on main;
 - any temporary coexistence owner, immediate successor, removal trigger, and deletion proof;
 - intended subsystem facade, private internals, dependency direction, co-located context/tests, and boundary integration tests when architecture is in scope;
 - when the change touches a durable record: the [cost-of-reversal](engineering-judgment.md) answers — current shape, target shape, known next feature the target must not paint over, and the framework being refused;

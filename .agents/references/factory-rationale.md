@@ -12,7 +12,7 @@ Read this only when changing the workflow itself. These safeguards answer failur
 | A test-harness finding opened another product review round. | Record test-only gaps as follow-up work; they do not open another round. |
 | Interesting work displaced a small fix blocking three pull requests. | Score ready work and take the highest return on review attention. |
 | A model took the shortest path and painted over a known next feature. | Cost-of-reversal questions in the contract, a shape perspective in review, and an occasional whole-tree audit. |
-| Boy scout cleanup rode along in the feature PR and review stalled. | Cleanup is a ticket: stack tests → refactor → feature, or file it for later. Do not mix. |
+| Boy scout cleanup rode along in the feature PR and review stalled. | Optional campground is a later ticket. A *required* refactor or migration is a stack: tests → refactor/migration → feature. Do not mix steps in one landing. |
 | One all-in-one `backlog` skill was loaded for the wrong job. | Separate intake, grooming, dispatch, implement, coordinate, review, and audit. |
 | Loop refilled from taste after READY was empty. | Eligible work is READY ∩ dependency-eligible ∩ no mutex; empty READY is stop even if NEEDS_SPECIFICATION remains. |
 | A long design chat spent hundreds of thousands of tokens to report an empty queue. | `ready_queue.py` / `pyr ready` is status. Run the loop in a fresh session, not the conversation that designed it. |
