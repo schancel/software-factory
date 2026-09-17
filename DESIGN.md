@@ -112,8 +112,9 @@ If the tracker cannot express blockers as edges, the binding says so and the pos
 | `.agents/scripts/emit_claim.py` | Prints a `work-claim:v1` comment body. Does not post. |
 | `.agents/scripts/issue_worktree.sh` | Add/remove `.worktrees/issue-N`. Does not claim. |
 | `.agents/scripts/test-skill-docs` | Mechanical lint that the kernel docs still encode the invariants. Advisory; confers no authority. |
+| `.agents/scripts/linear_ready.py` | Linear READY ∩ `blocked-by` relations, filtered by `repository:`. Advisory; does not call `linear`. |
 
-Both are GitHub-binding helpers. A Pyramid deployment already computes a frontier (`pyr ready`); it does not run these.
+GitHub helpers call `gh`. Pyramid uses `pyr ready`. Linear uses `linear` (schpet/linear-cli) plus `linear_ready.py`.
 
 ## Adoption
 

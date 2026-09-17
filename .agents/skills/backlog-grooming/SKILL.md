@@ -30,6 +30,8 @@ On GitHub, run `.agents/scripts/ready_queue.py --repo owner/name --workers N --f
 
 On Pyramid, `pyr ready --json` is that report. Do not invent the four-axis score.
 
+On Linear, `linear issue query --team TEAM --json --limit 0` then `.agents/scripts/linear_ready.py --repo owner/name`. See [linear.md](../../bindings/linear.md). Do not run the GitHub `gh` scripts. Do not guess the repo from cwd.
+
 This skill emits packets. It does not dispatch workers. `$backlog-loop` owns the replenishing pool.
 
 ## Portable dispatch

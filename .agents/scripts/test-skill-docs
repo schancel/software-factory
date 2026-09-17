@@ -47,6 +47,7 @@ for path in \
     .agents/binding \
     .agents/bindings/github.md \
     .agents/bindings/pyramid.md \
+    .agents/bindings/linear.md \
     .agents/scripts/ticket_poset.py \
     .agents/scripts/ticket_triage.py
 do
@@ -77,6 +78,7 @@ require_pattern "shape perspective is selected for models" 'Shape[^.]{0,80}cost 
 require_pattern "review is the only skill that lands" 'only skill that lands' "$DOCS"
 require_pattern "poset script is invoked from .agents/scripts" '\.agents/scripts/ticket_poset' "$DOCS"
 require_pattern "skills load the tracker from .agents/binding" 'load-binding' "$DOCS"
+require_pattern "Linear binding names the community CLI" 'schpet/linear-cli' "$DOCS"
 
 GH_BIND=$(normalized < "$ROOT/.agents/bindings/github.md")
 require_pattern "github binding names blocked-by write path" 'blocked-by|add-blocked-by' "$GH_BIND"

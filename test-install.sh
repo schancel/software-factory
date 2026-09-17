@@ -58,6 +58,12 @@ sh "$INSTALL" --tracker pyramid "$PYR" >/dev/null
 grep -q 'tracker: pyramid' "$PYR/.agents/binding" || fail "--tracker pyramid"
 ok "--tracker pyramid"
 
+LIN="$WORKDIR/lin"
+mkdir -p "$LIN"
+sh "$INSTALL" --tracker linear "$LIN" >/dev/null
+grep -q 'tracker: linear' "$LIN/.agents/binding" || fail "--tracker linear"
+ok "--tracker linear"
+
 mkdir -p "$WORKDIR/empty2"
 set +e
 bad_out=$(sh "$INSTALL" --tracker jira "$WORKDIR/empty2" 2>&1)

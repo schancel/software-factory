@@ -5,11 +5,11 @@
 # against .agents/.factory-base (last installed kernel). Local edits and
 # kernel updates both land in the dest file.
 # --force: take the kernel file (discard dest edits on that path).
-# --tracker github|pyramid writes .agents/binding.
+# --tracker github|pyramid|linear writes .agents/binding.
 set -eu
 
 usage() {
-    printf 'usage: %s [--force] [--tracker github|pyramid] <consuming-repo-root>\n' "$0" >&2
+    printf 'usage: %s [--force] [--tracker github|pyramid|linear] <consuming-repo-root>\n' "$0" >&2
     exit 2
 }
 
@@ -40,9 +40,9 @@ test -n "$DEST" || usage
 test -d "$DEST" || { printf 'install: not a directory: %s\n' "$DEST" >&2; exit 1; }
 
 case ${TRACKER:-github} in
-    github|pyramid) ;;
+    github|pyramid|linear) ;;
     *)
-        printf 'install: unknown tracker %s (github or pyramid)\n' "$TRACKER" >&2
+        printf 'install: unknown tracker %s (github, pyramid, or linear)\n' "$TRACKER" >&2
         exit 1
         ;;
 esac
@@ -108,7 +108,7 @@ done
 
 write_binding() {
     printf '# Which tracker this checkout uses. Every factory skill reads this file first.\n' > "$DEST/.agents/binding"
-    printf '# github (default) | pyramid\n' >> "$DEST/.agents/binding"
+    printf '# github (default) | pyramid | linear\n' >> "$DEST/.agents/binding"
     printf 'tracker: %s\n' "$1" >> "$DEST/.agents/binding"
 }
 

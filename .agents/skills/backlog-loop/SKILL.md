@@ -11,7 +11,7 @@ Load the tracker from [`.agents/binding`](../../references/load-binding.md) befo
 
 Maintain a pool no larger than this machine can compile and test at once (cores, RAM, how heavy this repo's suite is). A user-stated count wins; otherwise use the consuming repo's `AGENTS.md` default if it has one. Dispatch [eligible](../../references/queue.md#eligible-work) tickets until that ceiling. As soon as any worker finishes, record its result, release or hand off its claim, refresh the item/poset state, and dispatch the next eligible ticket immediately. Dependency waves are ordering constraints, not barriers.
 
-On GitHub, `.agents/scripts/ready_queue.py --workers N --format json` is the dispatchable set: READY items in dependency order, `NEEDS_SPECIFICATION` omitted. Do not intersect `ticket_poset.py` and `ticket_triage.py` by hand. On Pyramid, `pyr ready --json` is that report — do not invent scores. Isolate workers with `.agents/scripts/issue_worktree.sh`.
+On GitHub, `.agents/scripts/ready_queue.py --workers N --format json` is the dispatchable set: READY items in dependency order, `NEEDS_SPECIFICATION` omitted. Do not intersect `ticket_poset.py` and `ticket_triage.py` by hand. On Pyramid, `pyr ready --json` is that report — do not invent scores. On Linear, `linear issue query --json` then `.agents/scripts/linear_ready.py --repo owner/name` ([linear.md](../../bindings/linear.md)). Isolate workers with `.agents/scripts/issue_worktree.sh`.
 
 Every delegation packet includes the ticket, accepted outcome, tier, provider/model lane, base revision, worktree, allowed and prohibited scope, proof/gates, and handoff format from [task-packet.md](../../references/task-packet.md). Use the native mechanism for the active harness. Preserve the packet fields and report the provider/model actually selected. If the harness cannot select the requested lane, report that instead of silently substituting the primary model.
 
@@ -21,6 +21,6 @@ Stop when the user-requested budget is exhausted, [no eligible work remains](../
 
 ## Do not run this in a long chat
 
-"Is the queue empty?" is `.agents/scripts/ready_queue.py` (or `pyr ready`). No model. Do not answer it by rereading a design conversation.
+"Is the queue empty?" is `.agents/scripts/ready_queue.py`, `pyr ready`, or `linear_ready.py` as the binding says. No model. Do not answer it by rereading a design conversation.
 
 Run `$backlog-loop` in a **new session** or a subagent started with no inherited history (`fork_turns="none"`). Workers already get a packet, not this chat. The coordinator should too: a long parent transcript is not the loop, and asking it for status is how you pay for 280k of prefix to print nothing.

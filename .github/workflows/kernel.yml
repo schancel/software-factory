@@ -23,6 +23,7 @@ jobs:
           python3 .agents/scripts/test_issue_export.py
           python3 .agents/scripts/test_emit_claim.py
           python3 .agents/scripts/test_issue_worktree.py
+          python3 .agents/scripts/test_linear_ready.py
         # Run from repo root. Do not set working-directory to .agents/scripts
         # or these paths double (.agents/scripts/.agents/scripts/...).
       - name: Install script
