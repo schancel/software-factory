@@ -95,7 +95,7 @@ merge_one() {
     return 1
 }
 
-for part in skills references bindings scripts; do
+for part in skills references bindings harnesses scripts; do
     srcroot="$HERE/.agents/$part"
     destroot="$DEST/.agents/$part"
     baseroot="$DEST/.agents/.factory-base/$part"
