@@ -48,6 +48,9 @@ for path in \
     .agents/bindings/github.md \
     .agents/bindings/pyramid.md \
     .agents/bindings/linear.md \
+    .agents/harnesses/claude-code.md \
+    .agents/harnesses/codex.md \
+    .agents/harnesses/grok-build.md \
     .agents/scripts/ticket_poset.py \
     .agents/scripts/ticket_triage.py
 do
@@ -60,7 +63,7 @@ else
     pass "legacy all-in-one backlog skill is absent"
 fi
 
-DOCS=$(for file in "$SKILLS"/*/SKILL.md "$REFS"/*.md "$ROOT/.agents/bindings"/*.md; do
+DOCS=$(for file in "$SKILLS"/*/SKILL.md "$REFS"/*.md "$ROOT/.agents/bindings"/*.md "$ROOT/.agents/harnesses"/*.md; do
     normalized < "$file"
     printf ' '
 done)
