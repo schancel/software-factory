@@ -78,7 +78,7 @@ If `issue relation` is missing on an older binary, upgrade. Fallback (same mutat
 linear api '
 mutation($input: IssueRelationCreateInput!) {
   issueRelationCreate(input: $input) { success issueRelation { id } }
-}' --variables '{"input":{"issueId":"FROM_UUID","relatedIssueId":"TO_UUID","type":"blocks"}}'
+}' --variables-json '{"input":{"issueId":"FROM_UUID","relatedIssueId":"TO_UUID","type":"blocks"}}'
 ```
 
 For `blocked-by`, the CLI swaps the two IDs and still sends `type: blocks`. Do not send a GraphQL type named `blocked-by`.
