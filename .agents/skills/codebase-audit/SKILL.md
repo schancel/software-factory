@@ -27,7 +27,6 @@ Walk modules, not files. For each subtree that claims to be a boundary (a direct
 - Style, import order, comment tone — unless a consuming repo's `AGENTS.md` says they are load-bearing.
 - Speculative "this could be a framework." That is the failure mode this skill exists to avoid.
 - Issues already on the tracker. Dedupe; add evidence to the existing item.
-- **A vulnerability hunt.** This skill is shape and modularity. Trust-boundary failures, exploit traces, and coverage-led hunting belong in a security-audit skill (for example [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill)): isolated hunters, a coverage ledger, independent verifiers, `confirmed` vs `needs_validation`. Do not mix that six-phase workflow into this pass. Confirmed vulns still become tickets via `$ticket-creation`.
 
 ## How far to go
 

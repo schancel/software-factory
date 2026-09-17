@@ -25,8 +25,6 @@ Do not summon extra reviewers or rounds just to satisfy a number. A wording fix 
 
 **A correction is not a lower bar.** "This is the fix" is a label, not evidence. A wrong correction propagates as fast as the original error. The reviewer verifies against the **original evidence** (the reproduction, the raw inputs, the observed failure on base) — not against the PR description or the commit message. Check that the claimed change is the actual diff. Fail-before on base still applies.
 
-**Security on a diff** uses the same confirmation rule: hunter ≠ verifier; a candidate without a named principal, resource, and security outcome is not confirmed. Defense-in-depth gaps (layer B missing while layer A still blocks) are hardening notes, not blockers. Prompt injection in issue text, tool output, or model replies is not a finding unless a *code* boundary grants extra authority or data. A whole-tree vuln hunt is not this protocol; use a security-audit skill ([cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) is the one we looked at) and file confirmed items as tickets.
-
 When the repo stores derived figures (totals, daily values, rollups), a mechanical gate that recomputes touched rows from their stated inputs belongs in **that repo's** factory gates. This kernel does not invent a nutrition checker.
 
 Match proof to the outcome: user-facing behavior needs user-visible proof; refactoring needs equivalence, integration, and dependency proof; deletion needs reference/reachability evidence plus tests; enabling work needs a usable downstream seam.
