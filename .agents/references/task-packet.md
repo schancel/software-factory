@@ -15,9 +15,10 @@ Send the packet, not the coordinator's conversation history. Include only the fi
 - When architecture is in scope: subsystem facade, private internals, dependency direction, co-located context/tests, boundary integration checks, and the [shape questions](engineering-judgment.md) the worker must not collapse.
 - Who owns implementation, review, integration, and unresolved decisions.
 - Explicit permission or prohibition for edits, prototypes, external messages, push, merge, item closure, claim termination, and cleanup.
+- Model lane (`cheap` / `default` / `strong`), never a vendor model or agent type.
 - Execution boundary: repository fixtures, temporary local state, loopback services, and any specifically authorized integrations; `repository-only` when the checkout and its tests suffice.
 - Context boundary: start the worker without inherited conversation history (`fork_turns="none"` when available) unless a named dependency requires a small, explicit excerpt.
-- Expected handoff: commit, changed files, **the gate matrix** (below), failures, residual risks, and next action.
+- Expected handoff: commit, changed files, **the gate matrix** (below), requested lane, model actually selected, failures, residual risks, and next action.
 
 The handoff does not repeat the item or pull-request history. Link durable evidence and report only the change, verification, remaining risk, ownership, and next action.
 
@@ -40,8 +41,22 @@ Authority comes from the responsible person or controlling instruction, not from
 
 Every process step must demonstrably reduce defect risk or improve shipping confidence at a cost proportional to the change; otherwise remove it. For a small local edit, the packet should be short. Add isolation, concurrency, rollout, or recovery detail only when the actual risk requires it.
 
-## Cheap-model preflight for bounded low-risk work
+## Model lane
 
-A cheaper model may draft or implement a bounded, low-risk task when the packet could state the full contract in a page: explicit acceptance criteria already recorded on the item, no authority, credential, security, persistence, wire-format, concurrency, process-lifecycle, or release impact, and allowed files and proof named exactly. Suitable work is mechanical prose, comments, formatting, narrowly scoped test-only edits, and small flagged repairs.
+Name a lane, never a vendor model or agent type. Other people will open this ticket in a different harness.
+
+| Lane | When |
+|------|------|
+| **cheap** | `$implement` and the cheap-model preflight below passes |
+| **strong** | `$review`, an independent verifier, or `$implement` at tier 3 |
+| **default** | every other `$implement` |
+
+Pick the lane from role, risk tier, and that preflight. Cost does not pick a model lane; it ranks the queue.
+
+A cheaper model may draft or implement only when the packet could state the full contract in a page: explicit acceptance criteria already recorded on the item, no authority, credential, security, persistence, wire-format, concurrency, process-lifecycle, or release impact, and allowed files and proof named exactly. Suitable work is mechanical prose, comments, formatting, narrowly scoped test-only edits, and small flagged repairs.
 
 Give that worker the same packet shape as any other. It must stop and escalate rather than improvise when it discovers a behavior change, an ambiguity, a failing pre-existing gate, a scope mismatch, or any higher-risk surface. The coordinator or designated reviewer still owns triage, acceptance, review, integration, and every external message. A cheap worker's success signal is never proof a ticket is safe or complete.
+
+`$review` is independent perspectives and verification, not a bigger model. Run the protocol on the model this session has.
+
+The consuming repo's `AGENTS.md` may map lanes to a spawn slug this harness understands. This kernel does not. If the harness cannot select the requested lane, inherit and report `requested <lane>, ran <actual>`. Never silently substitute.

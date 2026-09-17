@@ -86,6 +86,8 @@ A skill that is not on the path of a ticket does not run. The cost-of-reversal t
 
 **Holes vs abstractions.** Leave the durable record shaped for a known next feature. Do not build the framework for a hypothetical caller. See engineering-judgment.
 
+**Lanes, not slugs.** Packets name `cheap` / `default` / `strong`. Cost ranks the queue; it does not pick a model lane. Review is independent verification, not a frontier model. A consuming `AGENTS.md` may map lanes; this kernel does not ship harness spawn adapters. Contributors will use different models.
+
 ## Binding contract
 
 A binding must map:

@@ -5,7 +5,7 @@ description: Coordinate sibling workstreams with solution contracts, exclusive w
 
 # Coordination
 
-Deliver the smallest coherent change that satisfies the accepted outcome while keeping independently evolving subsystems understandable in bounded context. This workflow is model-neutral: use the runtime's available delegation and workspace-isolation facilities without depending on vendor-specific agent names.
+Deliver the smallest coherent change that satisfies the accepted outcome while keeping independently evolving subsystems understandable in bounded context. This workflow is model-neutral: [packets name a lane](../../references/task-packet.md), not a vendor model or agent type; use the runtime's available delegation and workspace-isolation facilities.
 
 Load the tracker from [`.agents/binding`](../../references/load-binding.md) before any tracker verb. Skip ordinary research and lightweight prose edits. A single backlog item with no siblings goes to `$implement`; load this when two or more workstreams, or an integration owner distinct from the workers, are in play. `$backlog-loop` owns the replenishing pool across tickets. This skill owns siblings of one parent outcome.
 

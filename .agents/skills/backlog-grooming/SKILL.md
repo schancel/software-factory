@@ -20,7 +20,7 @@ For each item, record or extract:
 - value, cost, certainty, and unblocking scores with one-sentence justification, using the kernel [queue](../../references/queue.md) unless the binding replaces ranking;
 - open blocked-by dependencies (native tracker edges, not body prose);
 - declared files, subsystem, or semantic scope; and
-- risk tier and required proof/gate stage.
+- risk tier, implement [model lane](../../references/task-packet.md), and required proof/gate stage.
 
 Missing acceptance criteria or owner means `NEEDS_SPECIFICATION`, not merely low priority. A missing file list is a scope clarification task unless the ticket is an explicitly exploratory investigation. See [issue readiness](../../references/issue-readiness.md).
 
@@ -36,6 +36,6 @@ This skill emits packets. It does not dispatch workers. `$backlog-loop` owns the
 
 ## Portable dispatch
 
-Emit a packet from [task-packet.md](../../references/task-packet.md): ticket, outcome, tier, provider lane, base revision, worktree, allowed and prohibited scope, required proof, and handoff format. The primary harness translates that packet to its native worker API. If the harness cannot select the requested provider/model, report that constraint rather than silently substituting the primary model.
+Emit a packet from [task-packet.md](../../references/task-packet.md): ticket, outcome, tier, model lane, base revision, worktree, allowed and prohibited scope, required proof, and handoff format. The active harness translates that packet to its native worker API. Lane selection and substitution rules live in the packet.
 
 Mechanical output is advisory. Human authority remains required for readiness, claims, scope changes, provider credentials, review, merge, and closure.

@@ -72,7 +72,7 @@ Eligible tickets (and siblings of one outcome) fan out to parallel `$implement` 
 | [`review`](.agents/skills/review/SKILL.md) | Perspectives, confirmation, split/stack | Implementing the original ticket |
 | [`codebase-audit`](.agents/skills/codebase-audit/SKILL.md) | Whole-tree dead code, collapsed seams, earned abstractions | A refactor in place |
 
-Ready work is scored, on the item, as `(value × certainty × (1 + unblocking)) / cost`. Cheap, certain, unblocking changes go first because **review attention is the scarce half of cost**. A missing owner or acceptance criteria is not “low priority”; it is not ready. Bugs in the same area outrank the feature that touches them.
+Ready work is scored, on the item, as `(value × certainty × (1 + unblocking)) / cost`. Cheap, certain, unblocking changes go first because **review attention is the scarce half of cost**. Cost does not pick a model. Packets name a lane (`cheap` / `default` / `strong`), not a vendor, so the next person can open the ticket in a different harness. A missing owner or acceptance criteria is not “low priority”; it is not ready. Bugs in the same area outrank the feature that touches them.
 
 Scripts under [`.agents/scripts/`](.agents/scripts/) print a dependency-ordered frontier and flag missing readiness fields. They do not assign work. People remain accountable for readiness, ownership, approval, merge, and closure.
 

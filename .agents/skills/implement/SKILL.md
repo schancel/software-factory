@@ -29,7 +29,7 @@ When the [backlog wrapper](../../references/issue-readiness.md) is active: confi
 
 ## Implement, prove, compress
 
-Implement the accepted outcome only. Add outcome-appropriate proof: fail-before/pass-after at the visible boundary for a defect; equivalence, integration, and dependency-boundary proof for a refactor; reachability plus tests for a deletion; a usable downstream seam for enabling work. Follow [execution efficiency](../../references/execution-efficiency.md): short handoffs, no recap, do not open the review protocol. Isolate with `.agents/scripts/issue_worktree.sh add <n>`. Cheap-model preflight is in the [task packet](../../references/task-packet.md).
+Implement the accepted outcome only. Add outcome-appropriate proof: fail-before/pass-after at the visible boundary for a defect; equivalence, integration, and dependency-boundary proof for a refactor; reachability plus tests for a deletion; a usable downstream seam for enabling work. Follow [execution efficiency](../../references/execution-efficiency.md): short handoffs, no recap, do not open the review protocol. Isolate with `.agents/scripts/issue_worktree.sh add <n>`. Model lane is in the [task packet](../../references/task-packet.md).
 
 If the outcome, scope, or authority is still unclear, return to specification. If an external dependency blocks progress, name it. If evidence shows the outcome cannot be delivered under accepted constraints, record that rather than accumulating ceremony.
 
@@ -39,4 +39,4 @@ If this outcome **requires** a refactor or a migration, do not mix it with the f
 
 ## Hand off
 
-Do not merge because the tests are green. `$review` is the only skill that lands. Report the exact commit, gates, remaining risks, and next action. Sibling coordination belongs to `$coordinate`.
+Do not merge because the tests are green. `$review` is the only skill that lands. Report the exact commit, gates, remaining risks, requested lane, model actually selected, and next action. Sibling coordination belongs to `$coordinate`.

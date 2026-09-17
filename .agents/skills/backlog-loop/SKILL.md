@@ -13,7 +13,7 @@ Maintain a pool no larger than this machine can compile and test at once (cores,
 
 On GitHub, `.agents/scripts/ready_queue.py --workers N --format json` is the dispatchable set: READY items in dependency order, `NEEDS_SPECIFICATION` omitted. Do not intersect `ticket_poset.py` and `ticket_triage.py` by hand. On Pyramid, `pyr ready --json` is that report — do not invent scores. On Linear, `linear issue query --json` then `.agents/scripts/linear_ready.py --repo owner/name` ([linear.md](../../bindings/linear.md)). Isolate workers with `.agents/scripts/issue_worktree.sh`.
 
-Every delegation packet includes the ticket, accepted outcome, tier, provider/model lane, base revision, worktree, allowed and prohibited scope, proof/gates, and handoff format from [task-packet.md](../../references/task-packet.md). Use the native mechanism for the active harness. Preserve the packet fields and report the provider/model actually selected. If the harness cannot select the requested lane, report that instead of silently substituting the primary model.
+Every delegation packet includes the ticket, accepted outcome, tier, model lane, base revision, worktree, allowed and prohibited scope, proof/gates, and handoff format from [task-packet.md](../../references/task-packet.md). Use the native mechanism for the active harness. Lane selection and substitution rules live in the packet.
 
 Machine-local constraints (serialized browser suites, one writer of a given store, language build mutexes) belong in the consuming repo's `AGENTS.md`. This skill will not guess them.
 

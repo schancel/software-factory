@@ -24,13 +24,13 @@ If the candidate changes during a round, discard that round and restart at the n
 ## Workflow
 
 1. Inspect `git diff <base>...<tip>` and select every relevant perspective from the protocol. **Test quality is always selected. Shape is selected when the diff touches models, persistence, public formats, or module boundaries.**
-2. Give each selected perspective an independent pass. Do not seed one reviewer with another reviewer's conclusions.
-3. For each candidate finding, use a separate independent verifier whose task is to test the finding and actively seek counterevidence in guards, preconditions, callers, and platform contracts.
+2. Give each selected perspective an independent pass. Do not seed one reviewer with another reviewer's conclusions. Review is the protocol, not a model pick.
+3. For each candidate finding, use a separate independent verifier whose task is to test the finding and actively seek counterevidence in guards, preconditions, callers, and platform contracts. Verifier packets use lane `strong` ([task-packet](../../references/task-packet.md)); inherit and report if this harness cannot select it.
 4. Label verified defects `CONFIRMED`, unresolved concerns `PLAUSIBLE`, and disproven recurring concerns `SETTLED` with their counterevidence and validity premise. Only confirmed findings block integration.
 5. Repair confirmed same-contract product findings narrowly, rerun affected tests, freeze the new exact commit, and begin a fresh round. Test-only gaps become owned follow-ups; they do not open a further round.
 6. Converge when a round's confirmed findings are each either a repaired product defect or a recorded test-only gap. If the patch keeps growing, repeats the same failure class, or stops making meaningful progress, split or stack it rather than hiding findings.
 7. File new work discovered in review — a missing hole, a third copy of a pattern, a bug in the same area — through `$ticket-creation`. Do not silently widen the candidate.
-8. Record the exact reviewed commit, perspectives, findings, verification scenarios, tests, residual risks, and verdict next to the change.
+8. Record the exact reviewed commit, perspectives, findings, verification scenarios, tests, residual risks, requested lane, model actually selected, and verdict next to the change.
 
 Split only independently provable work. Stack when each intermediate state is safe to land and the whole would not get a real review. Large diffs attract the same number of findings as small ones.
 

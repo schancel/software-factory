@@ -9,7 +9,7 @@ A [binding](../bindings/github.md) may replace the ranking function. It may not 
 Score every ready item 1–5 on four axes, written **on the item** so the next reader inherits it instead of re-deriving it:
 
 - **value** — what breaks, or stays broken, if this never ships;
-- **cost** — implementation plus review. Review is the scarce half, so authority, credentials, money, persistence, migration, concurrency, and process-lifecycle changes cost more than their diff suggests;
+- **cost** — implementation plus review. Review is the scarce half, so authority, credentials, money, persistence, migration, concurrency, and process-lifecycle changes cost more than their diff suggests. Cost does not pick a [model lane](task-packet.md).
 - **certainty** — how sure the approach is right and the acceptance criteria unambiguous. Low certainty means the real first task is a spike, scored as its own item;
 - **unblocking** — how many other ready items this releases.
 

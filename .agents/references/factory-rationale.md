@@ -17,3 +17,4 @@ Read this only when changing the workflow itself. These safeguards answer failur
 | One all-in-one `backlog` skill was loaded for the wrong job. | Separate intake, grooming, dispatch, implement, coordinate, review, and audit. |
 | Loop refilled from taste after READY was empty. | Eligible work is READY ∩ dependency-eligible ∩ no mutex; empty READY is stop even if NEEDS_SPECIFICATION remains. |
 | A long design chat spent hundreds of thousands of tokens to report an empty queue. | `ready_queue.py` / `pyr ready` is status. Run the loop in a fresh session, not the conversation that designed it. |
+| A packet named a vendor model; the next session was a different harness, or review was treated as “use a bigger model.” | Packets name a lane. Cost does not pick it. Review is the protocol. This kernel does not ship harness spawn adapters. |
