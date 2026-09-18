@@ -8,10 +8,19 @@ Every process step must demonstrably reduce defect risk or improve shipping conf
 
 ## Review the actual risk
 
-Choose perspectives from the diff:
+Tier 1 never reaches this skill — [`$review`](../skills/review/SKILL.md) already refuses "lightweight prose edits that carry no behavioral claim" — so every perspective below is being chosen against work that already cleared that bar.
+
+A floor runs on every change that reaches this skill (tier 2 or 3), regardless of what the diff happens to touch:
 
 - **Correctness** — promised observable outcome for valid and invalid inputs.
-- **Shape** — [cost of reversal, holes vs frameworks, chunkability, single home](engineering-judgment.md). Select whenever the diff touches models, persistence, public formats, or module boundaries.
+- **Security** — injection, unsafe deserialization of untrusted input, secret/credential handling, dependency/supply-chain risk, unsafe defaults. Broader than Authority/permission's actor-to-effect mapping below.
+- **Efficiency** — algorithmic complexity against the actual data size, N+1 access patterns, unbounded growth, cost proportional to load rather than a fixed constant.
+- **Simplicity** — the compression pass below actually ran; the result is the simplest coherent architecture, not merely a small diff.
+- **Shape** — [cost of reversal, holes vs frameworks, chunkability, single home](engineering-judgment.md). Weighs heaviest when the diff touches models, persistence, public formats, or module boundaries, but is part of the floor either way.
+- **Test quality** — the regression fails at the production boundary on the base; a deliberately broken local variant would not escape it.
+
+Beyond the floor, choose perspectives from what the diff actually does:
+
 - **Concurrency** — duplication, retry, cancellation, timeout, disconnect, replacement, reordered delivery.
 - **Persistence/format** — stored data replayed, migrated, bounded, attributed, without loss.
 - **Authority/permission** — which actor can cause each effect; data stays in its visibility boundary.
@@ -19,9 +28,8 @@ Choose perspectives from the diff:
 - **Compatibility** — clients, platforms, schemas, integrations, public contracts.
 - **Economic/incentive safety** — minting, double-spend, inflation, misattribution, where value is allocated.
 - **Accessibility** — important state and action identifiable without visual coordinates.
-- **Test quality** — always selected. The regression fails at the production boundary on the base; a deliberately broken local variant would not escape it.
 
-Do not summon extra reviewers or rounds just to satisfy a number. A wording fix may need no independent perspective. A permission check needs several, including shape if it changes who an object belongs to.
+Do not summon extra reviewers or rounds beyond this floor just to satisfy a number. A permission check needs Authority/permission and Persistence/format on top of the floor; most ordinary tier-2 changes need only the floor.
 
 **A correction is not a lower bar.** "This is the fix" is a label, not evidence. A wrong correction propagates as fast as the original error. The reviewer verifies against the **original evidence** (the reproduction, the raw inputs, the observed failure on base) — not against the PR description or the commit message. Check that the claimed change is the actual diff. Fail-before on base still applies.
 
