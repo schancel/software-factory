@@ -67,6 +67,7 @@ The coordinator owns cleanup; workers never remove another worker's workspace. C
 
 - Remove a verification, mutant, or probe workspace as soon as its verdict is recorded. Its evidence is the recorded result, not the checkout.
 - Remove a worker's workspace, and delete its branch, once `main` contains its accepted change. Squashed integration hides ancestry, so use the recorded integration evidence or a tree comparison against `main` rather than `git branch --merged`.
+- Before deleting a branch, check for an open pull request based on it. A stacked pull request whose base branch disappears does not retarget itself to `main` — the tracker closes it, and its otherwise-unique commits need to be recovered onto a fresh branch. Land or retarget a dependent pull request first, or retarget it explicitly, before deleting the branch it stacks on.
 - Before removing a workspace that has uncommitted changes or a commit no ref reaches, record that state under `refs/salvage/`.
 - Stop disposable databases and containers with the workspace that created them.
 

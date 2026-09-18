@@ -62,6 +62,8 @@ Review the candidate that will land. GitHub's squash button rewrites SHAs; that 
 
 If a consuming repo treats commit identity as evidence (see [pyramid.md](pyramid.md)), it must not use this land rule.
 
+`gh pr merge --delete-branch` deletes the head branch immediately. If another open pull request is stacked on that branch (its `--base`), GitHub does not retarget it to the default branch — it closes it. Land or retarget every dependent pull request before deleting a branch anything else is based on; see [work-claims.md](../references/work-claims.md#workspace-cleanup).
+
 ## Publishing boundary
 
 Creating, editing, labeling, or commenting on GitHub is an external mutation and requires the user's explicit confirmation of the prepared artifact, except where the user already authorized the backlog loop to claim and comment as part of dispatch.
