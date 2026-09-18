@@ -62,7 +62,7 @@ Review the candidate that will land. GitHub's squash button rewrites SHAs; that 
 
 If a consuming repo treats commit identity as evidence (see [pyramid.md](pyramid.md)), it must not use this land rule.
 
-`gh pr merge --delete-branch` deletes the head branch immediately. If another open pull request is stacked on that branch (its `--base`), GitHub does not retarget it to the default branch — it closes it. Land or retarget every dependent pull request before deleting a branch anything else is based on; see [work-claims.md](../references/work-claims.md#workspace-cleanup).
+GitHub's native [Stacked Pull Requests](https://docs.github.com/en/pull-requests/get-started/about-stacked-prs) feature auto-retargets the next PR in a stack on merge — but only when the PRs are backed by that formal stack (created via its own tooling; merging one through the ordinary REST/CLI merge path errors, asking for the async stack-merge API instead). An ordinary pull request whose `--base` simply happens to be another branch is not that — `gh pr create --base <branch>`, which is what a coordinator or `$implement` worker normally does, never creates a formal stack. `gh pr merge --delete-branch` deletes the head branch immediately, and for an ordinary (non-formal-stack) base relationship GitHub does not retarget the dependent pull request to the default branch — it closes it, irrecoverably. Land or retarget every dependent pull request before deleting a branch anything else is based on; see [work-claims.md](../references/work-claims.md#workspace-cleanup).
 
 ## Publishing boundary
 
