@@ -82,7 +82,7 @@ require_pattern "review is the only skill that lands" 'only skill that lands' "$
 require_pattern "packets name a model lane" 'model lane' "$DOCS"
 require_pattern "cost does not pick a model lane" 'cost does not pick' "$DOCS"
 require_pattern "do not silently substitute the model" 'silently substitut' "$DOCS"
-require_pattern "kernel does not ship harness spawn adapters" 'does not ship harness spawn' "$DOCS"
+require_pattern "kernel never chooses a vendor model" 'never (names?|chooses?)[^.]{0,80}vendor model' "$DOCS"
 require_pattern "poset script is invoked from .agents/scripts" '\.agents/scripts/ticket_poset' "$DOCS"
 require_pattern "skills load the tracker from .agents/binding" 'load-binding' "$DOCS"
 require_pattern "Linear binding names the community CLI" 'schpet/linear-cli' "$DOCS"
