@@ -24,6 +24,8 @@ Record:
 
 The contract should be readable without a protocol decoder. Link supporting evidence normally. Tooling is advisory mechanical lint, never an authority engine.
 
+For an item discovered by `$review` or `$codebase-audit`, build the contract from the originating finding's own evidence (the concrete failure, the simplest coherent correction, the regression, the affected invariant) rather than re-deriving it from scratch.
+
 ## Change control
 
 If implementation discovers a materially different outcome, boundary, authority need, or risk, stop and get the responsible person's decision before expanding production work. Small clarifications that do not alter those things can be recorded directly without restarting the whole process.

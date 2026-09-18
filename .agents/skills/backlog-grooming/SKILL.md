@@ -24,6 +24,12 @@ For each item, record or extract:
 
 Missing acceptance criteria or owner means `NEEDS_SPECIFICATION`, not merely low priority. A missing file list is a scope clarification task unless the ticket is an explicitly exploratory investigation. See [issue readiness](../../references/issue-readiness.md).
 
+## Author the contract, at strong lane
+
+An item is not `READY` on a list of extracted fields alone. Author or complete its compact [solution contract](../../references/solution-contract.md) here, before dispatch — do not leave that to `$implement`, which may run at `default` or `cheap` lane and must not plan its own work. Tag this step `strong` lane.
+
+Build the contract from whatever evidence already exists on the item rather than re-deriving it from a blank slate: ticket-creation body and Notes, a review-filed finding's failure/correction/regression/invariant fields, audit evidence, or a contract `$coordinate` already started. A ticket filed from a `$review` finding already carries contract-grade evidence — elevate it into the contract's shape, do not discard it and start over.
+
 ## Queue construction
 
 On GitHub, run `.agents/scripts/ready_queue.py --repo owner/name --workers N --format json` for READY items in dependency order. It composes `ticket_poset.py` waves and `ticket_triage.py` rows; `NEEDS_SPECIFICATION` is omitted and is not dispatchable. Do not intersect those scripts by hand. Write blocked-by edges per the GitHub binding's [blocked-by edges](../../bindings/github.md#blocked-by-edges) paragraph; body prose is not an edge. Dependencies impose ordering; file and semantic overlaps impose a scheduling mutex. Prefer independent tickets in the same dependency-eligible set. Do not hand-build the triage JSON.
