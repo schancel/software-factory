@@ -2,7 +2,7 @@
 
 This repository *is* the skills. There is no application to build.
 
-- Skills live in `.agents/skills/`. Shared facts live in `.agents/references/`. Tracker verbs live in `.agents/bindings/`. Which tracker is `.agents/binding`.
+- Skills live in `.agents/skills/`. Shared facts live in `.agents/references/`. Tracker verbs live in `.agents/bindings/`. Which tracker is `.agents/binding`. Per-harness lane-resolution mechanics live in `.agents/harnesses/` — never the vendor model choice itself.
 - One home per fact. If a rule appears in two skills, move it to `references/` and point both at it.
 - Product-specific lore (language build mutexes, serialized browser suites, a `private/` tree, lane-to-model maps) does not belong here. It belongs in the consuming repo's `AGENTS.md`.
 - Scripts in `.agents/scripts/` report. They do not claim, merge, or close. `test-skill-docs` is mechanical lint of this kernel, not an authority engine.
