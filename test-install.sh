@@ -22,8 +22,9 @@ ok "first install into empty dest"
 test -f "$EMPTY/.agents/harnesses/claude-code.md" || fail "empty dest should get harness lane-resolution docs"
 test -f "$EMPTY/.agents/harnesses/codex.md" || fail "empty dest should get harness lane-resolution docs"
 test -f "$EMPTY/.agents/harnesses/grok-build.md" || fail "empty dest should get harness lane-resolution docs"
+test -f "$EMPTY/.agents/schemas/subsystem-manifest.v1.schema.json" || fail "empty dest should get boundary-load schemas"
 sh "$EMPTY/.agents/scripts/test-skill-docs" "$EMPTY" >/dev/null || fail "installed test-skill-docs should pass standalone against the installed copy"
-ok "harnesses/ installs and the installed lint passes standalone"
+ok "harnesses and schemas install; installed lint passes standalone"
 
 # Local line in SKILL.md must survive a second install (kernel unchanged).
 printf '\nLOCAL_EDIT\n' >> "$EMPTY/.agents/skills/implement/SKILL.md"

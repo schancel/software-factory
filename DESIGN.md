@@ -45,6 +45,7 @@ codebase-audit             parallel-coordination.md
                            issue-readiness.md
                            execution-efficiency.md
                            factory-rationale.md
+                           boundary-load.md
                            load-binding.md
 ```
 
@@ -88,6 +89,12 @@ A skill that is not on the path of a ticket does not run. The cost-of-reversal t
 
 **Lanes, not slugs.** Packets name `cheap` / `default` / `strong`. Cost ranks the queue; it does not pick a model lane. Review is independent verification, not a frontier model. A consuming `AGENTS.md` may map lanes; this kernel does not ship harness spawn adapters. Contributors will use different models.
 
+**Boundary load, not a maintainability score.** A subsystem is loadable when work in it can proceed from its own implementation and the public contracts of its dependencies. Consuming repositories may declare those architectural identities and surfaces in a versioned manifest and attach separately versioned boundary-load evidence to completed claims. The first report compares single-subsystem claims with the same primary subsystem; audit must still check whether their task mix and change size are comparable. Reports do not treat repository size, token use, file counts, or navigation volume as inherently bad, and they do not diagnose or authorize a refactor. See [`boundary-load.md`](.agents/references/boundary-load.md).
+
+The manifest is explicit because a directory is not necessarily a subsystem. Path roots map an architectural identity onto the current tree; they do not infer the architecture. Evidence records preserve observation coverage, so an unavailable inspected-path trace is `not_observed`, not a zero. Git supplies modified paths immediately. Inspected paths remain harness evidence and only `complete` observations enter escape-rate denominators.
+
+Periodic `$codebase-audit` runs use the latest reachable annotated `boundary-load-audit/v1/*` tag as the last completed-pass checkpoint. Full history remains available for baselines, while new evidence since the tag controls whether a telemetry candidate is newly actionable. Filing findings does not advance the tag; only a clean audit or integrated corrective pass does.
+
 ## Binding contract
 
 A binding must map:
@@ -115,12 +122,15 @@ If the tracker cannot express blockers as edges, the binding says so and the pos
 | `.agents/scripts/issue_worktree.sh` | Add/remove `.worktrees/issue-N`. Does not claim. |
 | `.agents/scripts/test-skill-docs` | Mechanical lint that the kernel docs still encode the invariants. Advisory; confers no authority. |
 | `.agents/scripts/linear_ready.py` | Linear READY ∩ `blocked-by` relations, filtered by `repository:`. Advisory; does not call `linear`. |
+| `.agents/scripts/boundary_load.py` | Validate manifests, derive Git-modified paths, record versioned evidence, and report boundary-escape history. Advisory. |
+| `.agents/scripts/boundary_path_hook.py` | Optional Codex, Claude Code, and Grok Build `PostToolUse` adapter for structured path-bearing calls. Its coverage is partial and is never sufficient for an escape-rate denominator by itself. |
+| `.agents/scripts/codex_boundary_hook.py` | Compatibility entry point for earlier Codex hook configuration. |
 
 GitHub helpers call `gh`. Pyramid uses `pyr ready`. Linear uses `linear` (schpet/linear-cli) plus `linear_ready.py`.
 
 ## Adoption
 
-Consuming repos **vendor** a snapshot. They run `install.sh <repo>` once (or copy `.agents/{skills,references,bindings,scripts}` and symlink `.claude/skills`), set `.agents/binding`, and then own the tree. Product-specific hard rules — language build mutexes, serialized browser suites, `pyr` verbs, scoring vs points — are local edits, not a fork of this git history.
+Consuming repos **vendor** a snapshot. They run `install.sh <repo>` once (or copy `.agents/{skills,references,bindings,harnesses,schemas,scripts}` and symlink `.claude/skills`), set `.agents/binding`, and then own the tree. Product-specific hard rules — language build mutexes, serialized browser suites, `pyr` verbs, scoring vs points — are local edits, not a fork of this git history.
 
 Do not submodule. A live pointer to this kernel would fight the reason to copy: Finch, Daybook, and Pyramid already adapted the loop and must keep doing so. `install.sh` overlays and **three-way-merges** kernel text (including `SKILL.md`) using `.agents/.factory-base`. Dest-only skills are never deleted. `--force` takes the kernel file. Binding is unchanged unless `--tracker` is passed. Consuming repos should commit `.factory-base`.
 
