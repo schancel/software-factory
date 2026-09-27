@@ -76,6 +76,10 @@ Ready work is scored, on the item, as `(value × certainty × (1 + unblocking)) 
 
 Scripts under [`.agents/scripts/`](.agents/scripts/) print a dependency-ordered frontier and flag missing readiness fields. They do not assign work. People remain accountable for readiness, ownership, approval, merge, and closure.
 
+Repositories may also opt into [boundary-load evidence](.agents/references/boundary-load.md): explicit subsystem identities and public/private path surfaces, separately versioned claim evidence, Git-derived modified paths, partial structured-path adapters for Codex, Claude Code, and Grok Build, and advisory historical reports of dependency-implementation escapes. Missing harness inspection telemetry stays `not_observed`; it is never counted as zero. Reports feed the existing audit and ticket graph and never create refactoring work themselves.
+
+For a periodic pass, ask: `Use $codebase-audit since the last completed pass and file the evidence-backed findings.` The skill uses an immutable annotated checkpoint tag, surveys the whole tree, and sends findings through ordinary ticket creation. Filing tickets does not mark the pass complete or make those tickets READY.
+
 The old all-in-one `backlog` skill is not here. It was doing five jobs, so agents loaded it for the wrong one.
 
 ## Use it
@@ -88,7 +92,7 @@ sh path/to/software-factory/install.sh --tracker pyramid /path/to/consuming-repo
 
 `--tracker github` (default), `pyramid`, or `linear` writes `.agents/binding`. Linear uses the community CLI `@schpet/linear-cli` — see [bindings/linear.md](.agents/bindings/linear.md). After install, edit that file if you picked wrong. Also set `team:` and `repository:` for Linear.
 
-That **merges** `.agents/{skills,references,bindings,scripts}` into the dest, including **into existing `SKILL.md` files**: a three-way merge against `.agents/.factory-base` (the last kernel snapshot). Local paragraphs and kernel updates both stay. Dest-only skills (a food logger, a `cfg` mutex) are never deleted. `--force` takes the kernel file on conflict or when you want to discard local edits on that path. Binding is unchanged unless `--tracker`. Commit `.factory-base` with the dest so the next install can merge. Do not submodule this kernel.
+That **merges** `.agents/{skills,references,bindings,harnesses,schemas,scripts}` into the dest, including **into existing `SKILL.md` files**: a three-way merge against `.agents/.factory-base` (the last kernel snapshot). Local edits and kernel updates both stay. Dest-only skills (a food logger, a `cfg` mutex) are never deleted. `--force` takes the kernel file on conflict or when you want to discard local edits on that path. Binding is unchanged unless `--tracker`. Commit `.factory-base` with the dest so the next install can merge. Do not submodule this kernel.
 
 Design notes, including why scoring is default and why one tracker uses a hole for scarce *points* instead, are in [`DESIGN.md`](DESIGN.md).
 
