@@ -68,8 +68,18 @@ For bug fixes, acceptance criteria should require a deterministic regression tes
 
 When the ticket is about a durable record (schema, identity, public format), the Notes may flag a [shape question](../../references/engineering-judgment.md) as a hypothesis — not as a design.
 
+## From an accepted plan
+
+When the input is a plan to break into tickets, not a report:
+
+- Draft the whole batch before publishing. Each item gets Summary, Acceptance criteria, and either `READY` or `NEEDS_SPECIFICATION` with the open question and its decider. Skip Reproduction/Expected/Actual.
+- Write blockers as native edges after creation, not as body prose.
+- An item gated on an owner, legal, or spending decision is `NEEDS_SPECIFICATION`, however clear its build steps are.
+- A bare `#N` links to the current repository. Write a reference to another repository as `owner/repo#N`.
+- The consuming repository's standing constraints (its `AGENTS.md`) apply to item bodies: the tracker is outside the machine.
+
 ## Publishing boundary
 
-Show the proposed title, body, labels, and any related item before external publication. Creating, editing, labeling, or commenting on the tracker is an external mutation and requires the user's explicit confirmation of the prepared ticket. A user who explicitly invokes a bounded `$codebase-audit` with instructions to file or publish its evidence-backed findings grants batch publication authority for tickets that meet that audit's stated evidence contract; this does not authorize unrelated findings or make them READY. If the tracker is unavailable, return a copy-paste-ready draft and say that it has not been published. After publication, report the item identity and exactly what was created; do not claim that a draft or local file is a live ticket.
+Show the proposed title, body, labels, and any related item before external publication. Creating, editing, labeling, or commenting on the tracker is an external mutation and requires the user's explicit confirmation of the prepared ticket. A user who explicitly invokes a bounded `$codebase-audit` with instructions to file or publish its evidence-backed findings grants batch publication authority for tickets that meet that audit's stated evidence contract; this does not authorize unrelated findings or make them READY. A user's explicit request to file a plan's tickets confirms that batch as drafted from the plan; show the list after publication. If the tracker is unavailable, return a copy-paste-ready draft and say that it has not been published. After publication, report the item identity and exactly what was created; do not claim that a draft or local file is a live ticket.
 
 Ticket creation itself does not create a work claim, assign ownership, or imply approval to implement.

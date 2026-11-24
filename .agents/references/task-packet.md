@@ -12,6 +12,8 @@ This is the worker's literal prompt. Include, plainly, with no rationale attache
 - Compact [solution contract](solution-contract.md) or equivalent accepted behavior, already authored — never ask a non-`strong` worker to write its own.
 - Repository, branch/worktree, starting commit, and exact allowed files.
 - Dependencies, known risks, and work that must remain untouched.
+- Gitignored state the work needs (private data, caches, credentials files), by absolute path in the main checkout: a worktree does not contain it.
+- The consuming repo's standing constraints, copied verbatim into prohibited scope. A worker does not see the coordinator's memory.
 - Required regression and outcome-appropriate proof: user-visible, equivalence/integration/dependency, reference/reachability plus tests, or usable downstream seam.
 - For a staged replacement: current stage, integration switch, predecessor-deletion owner, immediate successor, temporary-coexistence removal trigger, and proof that closes the parent outcome.
 - When architecture is in scope: subsystem facade, private internals, dependency direction, co-located context/tests, boundary integration checks, and the [shape questions](engineering-judgment.md) the worker must not collapse.

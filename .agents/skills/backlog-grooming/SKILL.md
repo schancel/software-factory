@@ -22,7 +22,7 @@ For each item, record or extract:
 - declared files, subsystem, or semantic scope; and
 - risk tier, implement [model lane](../../references/task-packet.md), and required proof/gate stage.
 
-Missing acceptance criteria or owner means `NEEDS_SPECIFICATION`, not merely low priority. A missing file list is a scope clarification task unless the ticket is an explicitly exploratory investigation. See [issue readiness](../../references/issue-readiness.md).
+Missing acceptance criteria or owner means `NEEDS_SPECIFICATION`, not merely low priority. Collect the open questions across those items into one decisions list for the owner: question, options, recommended default, and the items each answer unblocks, sorted by items unblocked. A missing file list is a scope clarification task unless the ticket is an explicitly exploratory investigation. See [issue readiness](../../references/issue-readiness.md).
 
 ## Author the contract, at strong lane
 

@@ -17,7 +17,7 @@ Name the tier in the first message about the change.
 |------|-----------|---------|
 | **1 — trivial** | prose, comments, a rename with no behaviour change | no contract, no packet. Run the gate stage the change touches. |
 | **2 — ordinary** | a bounded code change with a clear approach and a test that fails before it | an already-authored short [contract](../../references/solution-contract.md), gate stages the scope touches, then `$review`. |
-| **3 — risky** | authority, credentials, persistence, wire formats, concurrency, release, or data loss | full contract, production-boundary regression, `$review` of the candidate that will land. Include the [shape questions](../../references/engineering-judgment.md) when the durable record changes. |
+| **3 — risky** | authority, credentials, persistence, wire formats, concurrency, release, or data loss; also legal text, messages sent to third parties, personal data about real people, or spending money, even when the diff is only prose | full contract, production-boundary regression, `$review` of the candidate that will land. Include the [shape questions](../../references/engineering-judgment.md) when the durable record changes. |
 
 A tier is blast radius, not diff size. When two look defensible, pick the lower one and say why. If the diff grows into a higher tier, say so and raise it. A **correction inherits the blast radius of what it touches**. Two lines that change a stored number or a derived total are not tier 1 because they arrived labelled "the fix."
 

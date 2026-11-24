@@ -12,7 +12,7 @@ Before production work, record:
 - the smallest acceptable behavior change and explicit non-goals;
 - affected files or boundaries, likely risks, and rollback approach;
 - the named regression or proof, including fail-before/pass-after for a bug fix;
-- required outcome-appropriate proof: user-visible behavior, refactor equivalence/integration, deletion reachability plus tests, or a usable downstream seam;
+- required outcome-appropriate proof: user-visible behavior, refactor equivalence/integration, deletion reachability plus tests, or a usable downstream seam; for data or research work, a second-pass spot check of N records against their cited sources; for a playbook or procedure, one recorded dry run;
 - the person accountable for unresolved product or scope decisions; and
 - a conflict check against active work in the same files or semantics.
 
