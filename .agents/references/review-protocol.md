@@ -28,6 +28,7 @@ Beyond the floor, choose perspectives from what the diff actually does:
 - **Compatibility** — clients, platforms, schemas, integrations, public contracts.
 - **Economic/incentive safety** — minting, double-spend, inflation, misattribution, where value is allocated.
 - **Accessibility** — important state and action identifiable without visual coordinates.
+- **Exposure** — personal data, real names, images, identity inferences, or text that leaves the machine, checked against the consuming repo's standing constraints.
 
 Do not summon extra reviewers or rounds beyond this floor just to satisfy a number. A permission check needs Authority/permission and Persistence/format on top of the floor; most ordinary tier-2 changes need only the floor.
 

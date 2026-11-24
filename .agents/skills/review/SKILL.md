@@ -7,7 +7,7 @@ description: Independently review the candidate that will land from risk-derived
 
 Review the exact candidate that will land, not a moving branch. This is the only skill that lands. Derive perspectives from the actual diff. Open [review-protocol](../../references/review-protocol.md) sections as needed (findings, convergence, land), not as a preamble. Open [engineering judgment](../../references/engineering-judgment.md) only for the shape perspective. Load the tracker from [`.agents/binding`](../../references/load-binding.md) before applying a land rule. Handoff: verdict, findings, reviewed tip. No recap.
 
-Do not use this skill for lightweight prose edits that carry no behavioral claim.
+Do not use this skill for lightweight prose edits that carry no behavioral claim. Prose that is sent outside the repository or relied on legally is tier 3, not lightweight.
 
 ## Required inputs
 
