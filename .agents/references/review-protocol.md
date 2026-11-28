@@ -119,7 +119,7 @@ Land only when:
 - the named regression fails on base and passes on tip, for a fix;
 - affected local and CI gates pass at that tip;
 - each accepted feature or fix is one squashed commit, and distinct features are not combined;
-- the binding's land rule is satisfied ([GitHub squash](../bindings/github.md) carrying the reviewed tip, or [fast-forward to the reviewed tip](../bindings/pyramid.md));
+- the binding's land rule is satisfied ([GitHub squash](../bindings/github.md) carrying the reviewed tip, including its [target and result checks](../bindings/github.md#land-rule), or [fast-forward to the reviewed tip](../bindings/pyramid.md));
 - evidence, terminal ownership events, and cleanup are recorded after integration.
 
 If main later exposes a regression, fix it forward with a focused test and review.
